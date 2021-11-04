@@ -2,6 +2,7 @@ package com.openclassroom.projet5.controller;
 
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.service.PersonService;
+import com.openclassroom.projet5.service.exception.PersonNotFound;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,9 +52,15 @@ public class PersonController {
     }
 
     @DeleteMapping("/person/{id}")
-    public ResponseEntity<PersonDto> delete(@PathVariable Long id) {
-      personService.delete(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            personService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (PersonNotFound e) {
+            e.printStackTrace();
+        return ResponseEntity.notFound().build();
+        }
+
     }
 
 

@@ -4,6 +4,8 @@ import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.PersonMapper;
 import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.PersonRepository;
+import com.openclassroom.projet5.service.exception.PersonNotFound;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -39,8 +41,13 @@ public class PersonService {
         return personMapper.toDto(person);
     }
 
-    public void delete(Long id){
-        personRepository.deleteById(id);
+    public void delete(Long id) throws PersonNotFound {
+
+        try {
+            personRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new PersonNotFound(id);
+        }
     }
 
     public Iterable<Person> save(Collection<Person> persons) {
