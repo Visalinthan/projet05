@@ -27,7 +27,6 @@ public class Person {
 
     @JoinColumn(name = "address_id")
     @ManyToOne(fetch = FetchType.LAZY)
-
     private Address address;
 
 

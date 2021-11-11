@@ -16,7 +16,7 @@ public class FireStation {
     private Long id;
 
     @JoinColumn(name = "address_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Address address;
 
     private int station;

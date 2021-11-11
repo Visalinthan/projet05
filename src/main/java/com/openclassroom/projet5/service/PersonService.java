@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
 
     private final PersonRepository personRepository;
-
     private final PersonMapper personMapper;
 
     public PersonService(PersonRepository personRepository, PersonMapper personMapper) {
@@ -40,9 +40,21 @@ public class PersonService {
         person = personRepository.save(person);
         return personMapper.toDto(person);
     }
+    
+    public PersonDto update(Long id,PersonDto personDto){
+        Person person = personMapper.toEntity(personDto);
+        PersonDto updatedPersonDto = null;
+        Optional<Person> personFind = personRepository.findById(id);
+        
+        if (personFind.isPresent()) {
+            Person person1 = personFind.get();
+            person1 = personRepository.save(person1);
+            updatedPersonDto = personMapper.toDto(person1);
+        }
+        return updatedPersonDto;
+    }
 
     public void delete(Long id) throws PersonNotFound {
-
         try {
             personRepository.deleteById(id);
         }catch (EmptyResultDataAccessException e){

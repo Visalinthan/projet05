@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,7 +24,6 @@ public class PersonController {
     @GetMapping("/person")
     public ResponseEntity<List<PersonDto>> getPersons() {
         List<PersonDto> persons = personService.list();
-
         return ResponseEntity.ok().body(persons);
     }
 
@@ -40,16 +40,16 @@ public class PersonController {
     }
 
 
-    @PutMapping("/person")
-    public ResponseEntity<PersonDto> updatePerson(@RequestBody  PersonDto personDto) throws Exception {
+    /*@PutMapping("/person/{id}")
+    public ResponseEntity<PersonDto> updatePerson(@PathVariable("id") long id,@RequestBody  PersonDto personDto) throws Exception {
         if (personDto.getId() == null) {
-            throw new Exception("err");
+            throw new Exception("Person id not found");
         }
 
-        PersonDto result = personService.save(personDto);
+        PersonDto result = personService.update(id,personDto);
 
         return ResponseEntity.ok().body(result);
-    }
+    }*/
 
     @DeleteMapping("/person/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
@@ -58,10 +58,8 @@ public class PersonController {
             return ResponseEntity.ok().build();
         } catch (PersonNotFound e) {
             e.printStackTrace();
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
 
     }
-
-
 }
