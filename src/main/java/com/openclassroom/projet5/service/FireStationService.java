@@ -37,6 +37,12 @@ public class FireStationService {
         return fireStationRepository.save(fireStations);
     }
 
+    public FireStationDto save(FireStationDto fireStationDto){
+        FireStation fireStation = fireStationMapper.toEntity(fireStationDto);
+        fireStation = fireStationRepository.save(fireStation);
+        return fireStationMapper.toDto(fireStation);
+    }
+
     public  Iterable<FireStation> save(Collection<FireStation> fireStations){
         return fireStationRepository.saveAll(fireStations);
     }

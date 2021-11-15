@@ -31,6 +31,12 @@ public class PersonService {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    public Optional<PersonDto> personById(Long id){
+        return  personRepository.findById(id).stream()
+                .map(personMapper::toDto)
+                .findFirst();
+    }
+
     public Person save(Person person){
         return personRepository.save(person);
     }
@@ -42,16 +48,27 @@ public class PersonService {
     }
     
     public PersonDto update(Long id,PersonDto personDto){
-        Person person = personMapper.toEntity(personDto);
-        PersonDto updatedPersonDto = null;
-        Optional<Person> personFind = personRepository.findById(id);
-        
+        Optional<PersonDto> personFind = personRepository.findById(id).stream()
+                .map(personMapper::toDto)
+                .findFirst();
+
+        PersonDto updatedPerson = null;
+
         if (personFind.isPresent()) {
-            Person person1 = personFind.get();
-            person1 = personRepository.save(person1);
-            updatedPersonDto = personMapper.toDto(person1);
+            PersonDto personUpdate = personFind.get();
+            personUpdate.setFirstName(personDto.getFirstName());
+            personUpdate.setLastName(personDto.getLastName());
+            personUpdate.setEmail(personDto.getEmail());
+            personUpdate.setBirthdate(personDto.getBirthdate());
+            personUpdate.setPhone(personDto.getPhone());
+            personUpdate.setAddress(personDto.getAddress());
+            personUpdate.setCity(personDto.getCity());
+            personUpdate.setZip(personDto.getZip());
+            Person person = personMapper.toEntity(personUpdate);
+            person = personRepository.save(person);
+            updatedPerson = personMapper.toDto(person);
         }
-        return updatedPersonDto;
+        return updatedPerson;
     }
 
     public void delete(Long id) throws PersonNotFound {
