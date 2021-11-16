@@ -4,23 +4,26 @@ import com.openclassroom.projet5.dto.FireStationDto;
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.FireStationMapper;
 import com.openclassroom.projet5.model.FireStation;
+import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.FireStationRepository;
+import com.openclassroom.projet5.repository.PersonRepository;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class FireStationService {
 
     private FireStationRepository fireStationRepository;
+    private PersonRepository personRepository;
     private final FireStationMapper fireStationMapper;
 
-    public FireStationService(FireStationRepository fireStationRepository, FireStationMapper fireStationMapper){
+    public FireStationService(FireStationRepository fireStationRepository, FireStationMapper fireStationMapper, PersonRepository personRepository){
         this.fireStationRepository = fireStationRepository;
+        this.personRepository = personRepository;
         this.fireStationMapper = fireStationMapper;
     }
 
@@ -71,6 +74,20 @@ public class FireStationService {
 
     public void delete(Long id){
         fireStationRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<PersonDto> listPersonByStationNumber(int StationNumber){
+        Optional<FireStationDto> fireStationDto = fireStationRepository.findByStation(StationNumber).stream()
+                .map(fireStationMapper::toDto)
+                .findFirst();
+        List<PersonDto> personDto = null;
+        if (fireStationDto.isPresent()){
+           FireStationDto fireStationDto1 = fireStationDto.get();
+           personDto = personRepository.findByAddress(fireStationDto1.getAddress());
+        }
+
+        return personDto;
     }
 
 

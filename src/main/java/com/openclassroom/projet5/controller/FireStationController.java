@@ -1,7 +1,9 @@
 package com.openclassroom.projet5.controller;
 
 import com.openclassroom.projet5.dto.FireStationDto;
+import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.model.FireStation;
+import com.openclassroom.projet5.repository.FireStationRepository;
 import com.openclassroom.projet5.service.FireStationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +49,12 @@ public class FireStationController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         fireStationService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value="firestations", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<PersonDto>> getPersonsByNumberStation(@RequestParam("stationNumber") int StationNumber){
+        List<PersonDto> personDto =  fireStationService.listPersonByStationNumber(StationNumber);
+        return ResponseEntity.ok().body(personDto);
     }
 }
