@@ -37,9 +37,18 @@ public class FireStationMapper {
     public FireStation toEntity(FireStationDto fireStationDto) {
         FireStation fireStation = new FireStation();
         fireStation.setId(fireStationDto.getId());
-        Optional<Address> address = addressRepository.findByAddress(fireStationDto.getAddress().trim());
+        Optional<Address> addressExist = addressRepository.findByAddress(fireStationDto.getAddress().trim());
 
-        address.ifPresent(fireStation::setAddress);
+        addressExist.ifPresentOrElse(fireStation::setAddress, () -> {
+            Address address = new Address();
+            address.setAddress(fireStationDto.getAddress().trim());
+            address.setCity(fireStationDto.getCity());
+            address.setZip(fireStationDto.getZip());
+
+            address = addressRepository.save(address);
+            addressRepository.flush();
+            fireStation.setAddress(address);
+        });
 
         fireStation.setStation(fireStationDto.getStation());
         return fireStation;

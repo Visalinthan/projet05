@@ -25,11 +25,11 @@ public class PersonController {
         return ResponseEntity.ok().body(persons);
     }
 
-    @GetMapping("/person/{id}")
+   /* @GetMapping("/person/{id}")
     public ResponseEntity<Optional<PersonDto>> getPersonById(@PathVariable("id") long id) {
         Optional<PersonDto> person = personService.personById(id);
         return ResponseEntity.ok().body(person);
-    }
+    }*/
 
 
     @PostMapping("/person")
@@ -65,7 +65,7 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
-    @DeleteMapping("/person/{id}")
+   /*@DeleteMapping("/person/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             personService.delete(id);
@@ -75,5 +75,11 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
 
+    }*/
+
+    @DeleteMapping("/person/{firstName}-{lastName}")
+    public ResponseEntity<?> deletePersonByNames(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName) {
+        personService.deleteByNames(firstName,lastName);
+        return ResponseEntity.ok().build();
     }
 }

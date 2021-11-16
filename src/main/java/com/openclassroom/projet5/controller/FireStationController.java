@@ -34,4 +34,18 @@ public class FireStationController {
 
         return ResponseEntity.ok().body(result);
     }
+
+    @PutMapping("/firestation/{id}")
+    public ResponseEntity<FireStationDto> updateFireStation(@PathVariable("id") long id,@RequestBody FireStationDto fireStationDto) throws  Exception{
+
+        FireStationDto result = fireStationService.update(id,fireStationDto);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @DeleteMapping("firestation/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        fireStationService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }

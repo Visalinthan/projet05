@@ -7,6 +7,7 @@ import com.openclassroom.projet5.repository.PersonRepository;
 import com.openclassroom.projet5.service.exception.PersonNotFound;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PersonService {
 
     private final PersonRepository personRepository;
@@ -25,8 +27,17 @@ public class PersonService {
         this.personMapper = personMapper;
     }
 
+
+    public Person save(Person person){
+        return personRepository.save(person);
+    }
+
+    public Iterable<Person> save(Collection<Person> persons) {
+        return personRepository.saveAll(persons);
+    }
+
     public List<PersonDto> list(){
-       return personRepository.findAll().stream()
+        return personRepository.findAll().stream()
                 .map(personMapper::toDto)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -35,10 +46,6 @@ public class PersonService {
         return  personRepository.findById(id).stream()
                 .map(personMapper::toDto)
                 .findFirst();
-    }
-
-    public Person save(Person person){
-        return personRepository.save(person);
     }
 
     public PersonDto save(PersonDto personDto){
@@ -79,8 +86,10 @@ public class PersonService {
         }
     }
 
-    public Iterable<Person> save(Collection<Person> persons) {
-        return personRepository.saveAll(persons);
+    public void deleteByNames(String firstName,String lastName){
+         personRepository.deleteByNames(firstName,lastName);
     }
+
+
 
 }

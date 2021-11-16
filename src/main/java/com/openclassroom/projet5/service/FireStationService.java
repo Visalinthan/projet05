@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,19 +23,24 @@ public class FireStationService {
         this.fireStationRepository = fireStationRepository;
         this.fireStationMapper = fireStationMapper;
     }
+
+    public FireStation save(FireStation fireStations){
+        return fireStationRepository.save(fireStations);
+    }
+
+    public  Iterable<FireStation> save(Collection<FireStation> fireStations){
+        return fireStationRepository.saveAll(fireStations);
+    }
+
+    public Iterable<FireStation> listFireStation(){
+        return fireStationRepository.findAll();
+    }
+
     public List<FireStationDto> list(){
          List<FireStation> fireStations = fireStationRepository.findAll();
         return fireStations.stream()
                 .map(fireStationMapper::toDto)
                 .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-   /* public Iterable<FireStation> list(){
-        return fireStationRepository.findAll();
-    }*/
-
-    public FireStation save(FireStation fireStations){
-        return fireStationRepository.save(fireStations);
     }
 
     public FireStationDto save(FireStationDto fireStationDto){
@@ -43,7 +49,29 @@ public class FireStationService {
         return fireStationMapper.toDto(fireStation);
     }
 
-    public  Iterable<FireStation> save(Collection<FireStation> fireStations){
-        return fireStationRepository.saveAll(fireStations);
+    public FireStationDto update(Long id, FireStationDto fireStationDto){
+        Optional<FireStationDto> fireStationDtoFind = fireStationRepository.findById(id).stream()
+                .map(fireStationMapper::toDto)
+                .findFirst();
+
+        FireStationDto updatedFireStation = null;
+        if (fireStationDtoFind.isPresent()){
+            FireStationDto fireStationDtoUpdate = fireStationDtoFind.get();
+            fireStationDtoUpdate.setStation(fireStationDto.getStation());
+            fireStationDtoUpdate.setAddress(fireStationDto.getAddress());
+            fireStationDtoUpdate.setZip(fireStationDto.getZip());
+            fireStationDtoUpdate.setCity(fireStationDto.getCity());
+            FireStation fireStation = fireStationMapper.toEntity(fireStationDtoUpdate);
+            fireStation = fireStationRepository.save(fireStation);
+            updatedFireStation = fireStationMapper.toDto(fireStation);
+        }
+
+        return updatedFireStation;
     }
+
+    public void delete(Long id){
+        fireStationRepository.deleteById(id);
+    }
+
+
 }
