@@ -1,7 +1,11 @@
 package com.openclassroom.projet5.model;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,18 +28,20 @@ public class Person {
     private String email;
     private String phone;
 
-    @Temporal(TemporalType.DATE)
-    private Date birthdate;
+    private LocalDate birthdate;
 
     @JoinColumn(name = "address_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Address address;
-
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Medication> medications;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Allergy> allergys;
+
+    public Long CalculAge(LocalDate birthdate) {
+        return LocalDate.from(birthdate).until(LocalDate.now(), ChronoUnit.YEARS);
+    }
 
 }

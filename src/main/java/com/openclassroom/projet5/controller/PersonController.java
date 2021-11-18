@@ -2,12 +2,10 @@ package com.openclassroom.projet5.controller;
 
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.service.PersonService;
-import com.openclassroom.projet5.service.exception.PersonNotFound;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -83,4 +81,27 @@ public class PersonController {
         personService.deleteByNames(firstName,lastName);
         return ResponseEntity.ok().build();
     }
+
+    @RequestMapping(value="firestation", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<PersonDto>> getPersonsByNumberStation(@RequestParam("station_number") int StationNumber){
+        List<PersonDto> personDtos =  personService.listPersonByStationNumber(StationNumber);
+        return ResponseEntity.ok().body(personDtos);
+    }
+
+    @RequestMapping(value="childAlert", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<PersonDto>> getChildAlert(@RequestParam("address") String address){
+        List<PersonDto> person =  personService.listChildAlert(address);
+        return ResponseEntity.ok().body(person);
+    }
+
+    @RequestMapping(value="phoneAlert", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<String>> getPhoneAlert(@RequestParam("firestation") int StationNumber){
+        List<String> phone = personService.listPhoneByStationNumber(StationNumber);
+        return ResponseEntity.ok().body(phone);
+    }
+
+
 }

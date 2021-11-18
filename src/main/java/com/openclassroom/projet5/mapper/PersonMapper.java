@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import java.beans.Transient;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +69,7 @@ public class PersonMapper {
             person.setAddress(address);
         });
 
-        Date birthDate = this.findBirthDateByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
+        LocalDate birthDate = this.findBirthDateByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
         person.setBirthdate(birthDate);
         List<Medication> medications = this.findMedicationByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
 
@@ -108,7 +110,7 @@ public class PersonMapper {
         return person;
     }
 
-    private Date findBirthDateByFirstNameAndLastName(String firstName, String lastName, List<MedicalRecordDto> medicalRecordDto) {
+    private LocalDate findBirthDateByFirstNameAndLastName(String firstName, String lastName, List<MedicalRecordDto> medicalRecordDto) {
         String s = medicalRecordDto.stream()
                 .filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName))
                 .findFirst()
@@ -118,11 +120,14 @@ public class PersonMapper {
         if (s == null) {
             return null;
         }
+
         try {
-            return new SimpleDateFormat("dd/MM/yyyy").parse(s);
-        } catch (ParseException e) {
-            return null;
+            DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            return LocalDate.parse(s,formatter);
+        } catch (Exception e) {
+            return  null;
         }
+
     }
 
 

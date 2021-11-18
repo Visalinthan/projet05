@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -19,7 +20,7 @@ public class PersonDto {
     private String lastName;
     private String email;
     private String phone;
-    private Date birthdate;
+    private LocalDate birthdate;
     private String address;
     private Integer zip;
     private String city;

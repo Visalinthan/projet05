@@ -2,6 +2,7 @@ package com.openclassroom.projet5.service;
 
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.PersonMapper;
+import com.openclassroom.projet5.model.Address;
 import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.PersonRepository;
 import com.openclassroom.projet5.service.exception.PersonNotFound;
@@ -90,8 +91,25 @@ public class PersonService {
          personRepository.deleteByNames(firstName,lastName);
     }
 
+    public List<PersonDto> listPersonByStationNumber(int StationNumber){
+       List<PersonDto> person = personRepository.findByStation(StationNumber).stream()
+               .map(personMapper::toDto)
+               .collect(Collectors.toList());
+       return person;
+    }
 
+    public List<PersonDto> listChildAlert(String address){
+        return personRepository.findPersonByAddress(address).stream()
+                .filter(person -> person.CalculAge(person.getBirthdate())<=18)
+                .map(personMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
-
+    public List<String> listPhoneByStationNumber(int StationNumber){
+        List<String> phoneNumber = personRepository.findByStation(StationNumber).stream()
+                .map(person1 -> person1.getPhone())
+                .collect(Collectors.toList());
+        return phoneNumber;
+    }
 
 }

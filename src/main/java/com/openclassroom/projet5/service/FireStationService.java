@@ -1,15 +1,14 @@
 package com.openclassroom.projet5.service;
 
 import com.openclassroom.projet5.dto.FireStationDto;
-import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.FireStationMapper;
+import com.openclassroom.projet5.model.Address;
 import com.openclassroom.projet5.model.FireStation;
 import com.openclassroom.projet5.model.Person;
+import com.openclassroom.projet5.repository.AddressRepository;
 import com.openclassroom.projet5.repository.FireStationRepository;
 import com.openclassroom.projet5.repository.PersonRepository;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,11 +18,13 @@ public class FireStationService {
 
     private FireStationRepository fireStationRepository;
     private PersonRepository personRepository;
+    private AddressRepository addressRepository;
     private final FireStationMapper fireStationMapper;
 
-    public FireStationService(FireStationRepository fireStationRepository, FireStationMapper fireStationMapper, PersonRepository personRepository){
+    public FireStationService(FireStationRepository fireStationRepository, FireStationMapper fireStationMapper, PersonRepository personRepository,AddressRepository addressRepository){
         this.fireStationRepository = fireStationRepository;
         this.personRepository = personRepository;
+        this.addressRepository = addressRepository;
         this.fireStationMapper = fireStationMapper;
     }
 
@@ -40,7 +41,7 @@ public class FireStationService {
     }
 
     public List<FireStationDto> list(){
-         List<FireStation> fireStations = fireStationRepository.findAll();
+        List<FireStation> fireStations = fireStationRepository.findAll();
         return fireStations.stream()
                 .map(fireStationMapper::toDto)
                 .collect(Collectors.toCollection(LinkedList::new));
@@ -75,20 +76,17 @@ public class FireStationService {
     public void delete(Long id){
         fireStationRepository.deleteById(id);
     }
-
-    @Transactional
-    public List<PersonDto> listPersonByStationNumber(int StationNumber){
-        Optional<FireStationDto> fireStationDto = fireStationRepository.findByStation(StationNumber).stream()
-                .map(fireStationMapper::toDto)
-                .findFirst();
-        List<PersonDto> personDto = null;
-        if (fireStationDto.isPresent()){
-           FireStationDto fireStationDto1 = fireStationDto.get();
-           personDto = personRepository.findByAddress(fireStationDto1.getAddress());
+/*
+    public List<Person>  listPersonByStationNumber(int StationNumber){
+        List<Person> persons = null;
+        List<Address> AddressOfStation = fireStationRepository.findByStation(StationNumber); ;
+        List<Person> AllPerson = personRepository.findAll();
+        for (Address a : AddressOfStation) {
+            persons = personRepository.findByAddress(a);
         }
 
-        return personDto;
+        return persons;
     }
-
+*/
 
 }

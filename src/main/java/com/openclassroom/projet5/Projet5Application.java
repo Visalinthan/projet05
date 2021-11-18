@@ -2,6 +2,8 @@ package com.openclassroom.projet5;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.mapper.FireStationMapper;
 import com.openclassroom.projet5.mapper.PersonMapper;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +56,9 @@ public class Projet5Application {
 			//mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
 			//JSON file to Java object
 			JsonSource obj = mapper.readValue(jsonSource.getFile(), JsonSource.class);
-
+			mapper.setDateFormat(new SimpleDateFormat("MM/dd/yyyy"));
+			mapper.registerModule(new JavaTimeModule());
+			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 			final List<MedicalRecordDto> medicalrecords = obj.getMedicalrecords();
 			final List<Person> persons = obj.getPersons().stream()
 					.map(p -> personMapper.toEntity(p, medicalrecords))
