@@ -86,6 +86,7 @@ public class PersonController {
     public @ResponseBody
     ResponseEntity<List<PersonDto>> getPersonsByNumberStation(@RequestParam("station_number") int StationNumber){
         List<PersonDto> personDtos =  personService.listPersonByStationNumber(StationNumber);
+        personService.countMajorMinor(personDtos);
         return ResponseEntity.ok().body(personDtos);
     }
 

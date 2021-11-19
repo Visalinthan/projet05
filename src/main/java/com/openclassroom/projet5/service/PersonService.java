@@ -105,6 +105,12 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    public String countMajorMinor(List<PersonDto> personDtos){
+       Long nbMinor = personDtos.stream().map(personMapper::toEntity).filter(person -> person.CalculAge(person.getBirthdate())<=18).count();
+       Long nbMajor = personDtos.stream().map(personMapper::toEntity).filter(person -> person.CalculAge(person.getBirthdate())>=18).count();
+       return "Nombre d'adultes : "+ nbMajor +"\n Nombre d'enfants : "+ nbMinor;
+    }
+
     public List<String> listPhoneByStationNumber(int StationNumber){
         List<String> phoneNumber = personRepository.findByStation(StationNumber).stream()
                 .map(person1 -> person1.getPhone())
