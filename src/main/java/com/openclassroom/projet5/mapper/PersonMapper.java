@@ -45,6 +45,8 @@ public class PersonMapper {
         return personDto;
     }
 
+
+
     public Person toEntity(PersonDto personDto, List<MedicalRecordDto> medicalRecordDto) {
         Person person = new Person();
         MedicalRecord medicalRecord = new MedicalRecord();
@@ -71,9 +73,10 @@ public class PersonMapper {
 
         LocalDate birthDate = this.findBirthDateByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
         person.setBirthdate(birthDate);
-        List<Medication> medications = this.findMedicationByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
 
+        List<Medication> medications = this.findMedicationByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
         person.setMedications(medications);
+
         List<Allergy> allergies = this.findAllergyByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
         person.setAllergys(allergies);
 

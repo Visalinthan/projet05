@@ -19,6 +19,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class MedicalRecordDto {
 
+    private Long id;
     private String firstName;
     private String lastName;
     @JsonProperty("birthdate")
