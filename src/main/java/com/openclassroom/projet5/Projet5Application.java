@@ -6,10 +6,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.mapper.FireStationMapper;
+import com.openclassroom.projet5.mapper.MedicalRecordMapper;
 import com.openclassroom.projet5.mapper.PersonMapper;
-import com.openclassroom.projet5.model.FireStation;
-import com.openclassroom.projet5.model.Person;
+import com.openclassroom.projet5.model.*;
 import com.openclassroom.projet5.service.FireStationService;
+import com.openclassroom.projet5.service.MedicalRecordService;
 import com.openclassroom.projet5.utils.JsonSource;
 import com.openclassroom.projet5.service.PersonService;
 
@@ -22,6 +23,7 @@ import org.springframework.core.io.Resource;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,15 +31,17 @@ import java.util.stream.Collectors;
 public class Projet5Application {
 
 	private final PersonMapper personMapper;
+	private final MedicalRecordMapper medicalRecordMapper;
 	private final FireStationMapper fireStationMapper;
 
 	private final Resource jsonSource;
 
 	public Projet5Application(
 			PersonMapper personMapper,
-			FireStationMapper fireStationMapper,
+			MedicalRecordMapper medicalRecordMapper, FireStationMapper fireStationMapper,
 			@Value("classpath:json/data.json") Resource jsonSource) {
 		this.personMapper = personMapper;
+		this.medicalRecordMapper = medicalRecordMapper;
 		this.fireStationMapper = fireStationMapper;
 		this.jsonSource = jsonSource;
 	}
@@ -48,7 +52,7 @@ public class Projet5Application {
 
 	@Bean
 	@Transactional
-	CommandLineRunner runner(PersonService personService, FireStationService fireStationService){
+	CommandLineRunner runner(PersonService personService, MedicalRecordService medicalRecordService, FireStationService fireStationService){
 		return args -> {
 			ObjectMapper mapper = new ObjectMapper();
 
@@ -59,13 +63,20 @@ public class Projet5Application {
 			mapper.setDateFormat(new SimpleDateFormat("MM/dd/yyyy"));
 			mapper.registerModule(new JavaTimeModule());
 			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-			final List<MedicalRecordDto> medicalrecords = obj.getMedicalrecords();
+
 			final List<Person> persons = obj.getPersons().stream()
-					.map(p -> personMapper.toEntity(p, medicalrecords))
+					.map(p -> personMapper.toEntity(p))
 					.collect(Collectors.toList());
 
 			personService.save(persons);
 
+
+			//MedicalRecord medicalRecord = medicalRecordMapper.insertAllergy(medicalRecordDto);
+			//medicalRecordService.save(medicalRecord);
+
+
+			//medicalRecordService.saveAllergies(allergies);
+			//medicalRecordService.saveMedications(medications);
 
 			final List<FireStation> fireStations = obj.getFirestations().stream()
 					.map(fireStationDto -> fireStationMapper.toEntity(fireStationDto))

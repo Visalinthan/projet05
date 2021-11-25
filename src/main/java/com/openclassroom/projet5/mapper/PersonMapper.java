@@ -46,7 +46,7 @@ public class PersonMapper {
     }
 
 
-
+/*
     public Person toEntity(PersonDto personDto, List<MedicalRecordDto> medicalRecordDto) {
         Person person = new Person();
         MedicalRecord medicalRecord = new MedicalRecord();
@@ -85,7 +85,7 @@ public class PersonMapper {
 
         return person;
     }
-
+*/
     public Person toEntity(PersonDto personDto) {
         Person person = new Person();
         MedicalRecord medicalRecord = new MedicalRecord();
@@ -133,7 +133,7 @@ public class PersonMapper {
 
     }
 
-
+/*
     private List<Allergy> findAllergyByFirstNameAndLastName(String firstName, String lastName, List<MedicalRecordDto> medicalRecordDto) {
         List<String> s = medicalRecordDto.stream()
                 .filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName))
@@ -167,6 +167,6 @@ public class PersonMapper {
         return medications;
     }
 
-
+*/
 
 }
