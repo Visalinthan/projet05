@@ -88,7 +88,6 @@ public class PersonMapper {
 */
     public Person toEntity(PersonDto personDto) {
         Person person = new Person();
-        MedicalRecord medicalRecord = new MedicalRecord();
 
         person.setId(personDto.getId());
         person.setFirstName(personDto.getFirstName());
@@ -97,7 +96,6 @@ public class PersonMapper {
         person.setPhone(personDto.getPhone());
 
         Optional<Address> addressExist = addressRepository.findByAddress(personDto.getAddress().trim());
-
 
         addressExist.ifPresentOrElse(person::setAddress, () -> {
             Address address = new Address();

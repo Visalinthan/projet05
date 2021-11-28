@@ -23,7 +23,7 @@ public class MedicalRecordDto {
     private String lastName;
     @JsonProperty("birthdate")
     private String birthDate;
-    private List<String>  medications;
+    private List<String> medications;
     private List<String> allergies;
 
 

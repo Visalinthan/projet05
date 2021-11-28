@@ -26,5 +26,9 @@ public class MedicalRecord {
     @ManyToMany
     private List<Allergy> allergies = new ArrayList<>();
 
+    @JoinColumn(name = "person_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Person person;
+
 
 }

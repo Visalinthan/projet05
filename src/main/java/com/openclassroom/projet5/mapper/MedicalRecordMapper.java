@@ -2,108 +2,54 @@ package com.openclassroom.projet5.mapper;
 
 import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.model.*;
+import com.openclassroom.projet5.repository.AllergyRepository;
+import com.openclassroom.projet5.repository.MedicationRepository;
+import com.openclassroom.projet5.repository.PersonRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class MedicalRecordMapper {
 
-    public MedicalRecord toEntity(List<MedicalRecordDto> medicalRecordDto){
-        MedicalRecord medicalRecord = new MedicalRecord();
+    private final AllergyRepository allergyRepository;
+    private final MedicationRepository medicationRepository;
+    private final PersonRepository personRepository;
 
-        for (MedicalRecordDto m : medicalRecordDto) {
-            List<Medication> medications = this.insertMedication(m);
-            medicalRecord.setMedications(medications);
-
-            List<Allergy> allergies = this.insertAllergy(m);
-            medicalRecord.setAllergies(allergies);
-        }
-
-        return medicalRecord;
+    public MedicalRecordMapper(AllergyRepository allergyRepository, MedicationRepository medicationRepository, PersonRepository personRepository) {
+        this.allergyRepository = allergyRepository;
+        this.medicationRepository = medicationRepository;
+        this.personRepository = personRepository;
     }
-    /*
-        public MedicalRecordDto toDto(Person person){
-            MedicalRecordDto medicalRecordDto = new MedicalRecordDto();
-            medicalRecordDto.setFirstName(person.getFirstName());
-            medicalRecordDto.setLastName(person.getLastName());
-            List<String> medications = this.convertMedication(person.getMedications());
-            medicalRecordDto.setMedications(medications);
-            List<String> allergies = this.convertAllergy(person.getAllergys());
-            medicalRecordDto.setAllergies(allergies);
-            return medicalRecordDto;
-        }
-    */
-    public MedicalRecord toEntity(Person person, MedicalRecordDto medicalRecordDto) {
+
+    public MedicalRecord toEntity(MedicalRecordDto medicalRecordDto){
         MedicalRecord medicalRecord = new MedicalRecord();
 
-        if(medicalRecordDto.getFirstName().equals(person.getFirstName()) && medicalRecordDto.getLastName().equals(person.getLastName())){
-            List<Medication> medications = this.addMedication(person);
-            List<Allergy> allergies = this.addAllergy(person);
+        Optional<Person> personExist = personRepository.findByNames(medicalRecordDto.getFirstName(), medicalRecordDto.getLastName());
+        personExist.ifPresent(medicalRecord::setPerson);
 
-            person.setMedications(medications);
-            person.setAllergys(allergies);
-            medicalRecord.setMedications(medications);
-            medicalRecord.setAllergies(allergies);
-        }
-
+        List<Medication> medications = this.insertMedication(medicalRecordDto);
+        medicalRecord.setMedications(medications);
+        List<Allergy> allergies = this.insertAllergy(medicalRecordDto);
+        medicalRecord.setAllergies(allergies);
 
         return medicalRecord;
     }
 
-    private List<String> convertMedication(List<Medication> medication) {
-        List<String> medications = new ArrayList<>();
-        for (Medication m : medication) {
-            medications.add(m.getName());
-            medications.add(m.getDosage());
-        }
-        return medications;
-    }
-
-    private List<String> convertAllergy(List<Allergy> allergy) {
-        List<String> allergies = new ArrayList<>();
-        for (Allergy a : allergy) {
-            allergies.add(a.getName());
-        }
-        return allergies;
-    }
-
-    private List<Allergy> addAllergy(Person person) {
-        List<Allergy> s = person.getAllergys();
-        List<Allergy> allergies = new ArrayList<>();
-        for (Allergy allergy : s) {
-            Allergy allergy1 = new Allergy();
-            allergy1.setName(allergy.getName());
-            allergies.add(allergy1);
-        }
-        return allergies;
-    }
-
-    private List<Medication> addMedication(Person person) {
-        List<Medication> s = person.getMedications();
-        List<Medication> medications = new ArrayList<>();
-        if(s.size()<=0){
-            for (Medication medication : s) {
-                Medication medication1 = new Medication();
-                medication1.setName(medication.getName());
-                medication1.setDosage(medication.getDosage());
-
-                medications.add(medication1);
-            }
-        }
-
-        return medications;
-    }
 
     public List<Allergy> insertAllergy(MedicalRecordDto medicalRecordDto) {
         List<String> m = medicalRecordDto.getAllergies();
         List<Allergy> allergies = new ArrayList<>();
 
-        for (String s : m){
+        for (String s : m) {
             Allergy allergy1 = new Allergy();
             allergy1.setName(s);
             allergies.add(allergy1);
+            allergyRepository.save(allergy1);
+            allergyRepository.flush();
+
         }
         return allergies;
     }
@@ -116,6 +62,9 @@ public class MedicalRecordMapper {
             String[] a = s.split(":", 0);
             medication1.setName(a[0]);
             medication1.setDosage(a[1]);
+
+            medicationRepository.save(medication1);
+            medicationRepository.flush();
 
             medications.add(medication1);
         }

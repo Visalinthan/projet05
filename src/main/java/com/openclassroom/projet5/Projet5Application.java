@@ -38,7 +38,8 @@ public class Projet5Application {
 
 	public Projet5Application(
 			PersonMapper personMapper,
-			MedicalRecordMapper medicalRecordMapper, FireStationMapper fireStationMapper,
+			MedicalRecordMapper medicalRecordMapper,
+			FireStationMapper fireStationMapper,
 			@Value("classpath:json/data.json") Resource jsonSource) {
 		this.personMapper = personMapper;
 		this.medicalRecordMapper = medicalRecordMapper;
@@ -70,13 +71,11 @@ public class Projet5Application {
 
 			personService.save(persons);
 
+			final List<MedicalRecord> medicalRecords = obj.getMedicalrecords().stream()
+					.map(m -> medicalRecordMapper.toEntity(m))
+					.collect(Collectors.toList());
 
-			//MedicalRecord medicalRecord = medicalRecordMapper.insertAllergy(medicalRecordDto);
-			//medicalRecordService.save(medicalRecord);
-
-
-			//medicalRecordService.saveAllergies(allergies);
-			//medicalRecordService.saveMedications(medications);
+			medicalRecordService.save(medicalRecords);
 
 			final List<FireStation> fireStations = obj.getFirestations().stream()
 					.map(fireStationDto -> fireStationMapper.toEntity(fireStationDto))
