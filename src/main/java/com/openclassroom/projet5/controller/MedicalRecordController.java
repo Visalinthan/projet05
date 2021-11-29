@@ -16,19 +16,19 @@ public class MedicalRecordController {
     public MedicalRecordController(MedicalRecordService medicalRecordService) {
         this.medicalRecordService = medicalRecordService;
     }
-/*
+
     @GetMapping("/medicalRecords")
     public ResponseEntity<List<MedicalRecordDto>> getMedicalRecords() {
         List<MedicalRecordDto> medicalRecordDto = medicalRecordService.list();
         return ResponseEntity.ok().body(medicalRecordDto);
     }
 
-    @PostMapping("/medicalRecord/{id}")
-    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@PathVariable("id") long id,@RequestBody MedicalRecordDto medicalRecordDto){
+    @PostMapping("/medicalRecord")
+    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@RequestBody MedicalRecordDto medicalRecordDto){
 
-        MedicalRecordDto result = medicalRecordService.save(id,medicalRecordDto);
+        MedicalRecordDto result = medicalRecordService.save(medicalRecordDto);
 
         return ResponseEntity.ok().body(result);
     }
-*/
+
 }

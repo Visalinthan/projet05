@@ -1,10 +1,13 @@
 package com.openclassroom.projet5.service;
 
+import com.openclassroom.projet5.dto.MedicalRecordDto;
+import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.MedicalRecordMapper;
 import com.openclassroom.projet5.mapper.PersonMapper;
 import com.openclassroom.projet5.model.Allergy;
 import com.openclassroom.projet5.model.MedicalRecord;
 import com.openclassroom.projet5.model.Medication;
+import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.AllergyRepository;
 import com.openclassroom.projet5.repository.MedicalRecordRepository;
 import com.openclassroom.projet5.repository.MedicationRepository;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MedicalRecordService {
@@ -61,18 +66,20 @@ public class MedicalRecordService {
     public Iterable<MedicalRecord> save(Collection<MedicalRecord> medicalRecords) {
         return medicalRecordRepository.saveAll(medicalRecords);
     }
-/*
+
     public List<MedicalRecordDto> list(){
-        return personRepository.findAll().stream()
+        return medicalRecordRepository.findAll().stream()
                 .map(medicalRecordMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public MedicalRecordDto save(Long personId, MedicalRecordDto medicalRecordDto){
-        Person person = personRepository.findById(personId).stream().findFirst().get();
-        MedicalRecord medicalRecord = medicalRecordMapper.toEntity(person,medicalRecordDto);
+    public MedicalRecordDto save(MedicalRecordDto medicalRecordDto){
+        MedicalRecord medicalRecord = medicalRecordMapper.toEntity(medicalRecordDto);
         medicalRecord = medicalRecordRepository.save(medicalRecord);
-        return medicalRecordMapper.toDto(person);
+        return medicalRecordMapper.toDto(medicalRecord);
+
     }
-*/
+
+
+
 }
