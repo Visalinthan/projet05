@@ -65,8 +65,10 @@ public class Projet5Application {
 			mapper.registerModule(new JavaTimeModule());
 			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+			List<MedicalRecordDto> medical = obj.getMedicalrecords();
+
 			final List<Person> persons = obj.getPersons().stream()
-					.map(p -> personMapper.toEntity(p))
+					.map(p -> personMapper.toEntity(p,medical))
 					.collect(Collectors.toList());
 
 			personService.save(persons);

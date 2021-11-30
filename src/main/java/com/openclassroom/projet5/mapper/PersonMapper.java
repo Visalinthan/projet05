@@ -46,7 +46,6 @@ public class PersonMapper {
     }
 
 
-/*
     public Person toEntity(PersonDto personDto, List<MedicalRecordDto> medicalRecordDto) {
         Person person = new Person();
         MedicalRecord medicalRecord = new MedicalRecord();
@@ -74,18 +73,9 @@ public class PersonMapper {
         LocalDate birthDate = this.findBirthDateByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
         person.setBirthdate(birthDate);
 
-        List<Medication> medications = this.findMedicationByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
-        person.setMedications(medications);
-
-        List<Allergy> allergies = this.findAllergyByFirstNameAndLastName(personDto.getFirstName(), personDto.getLastName(), medicalRecordDto);
-        person.setAllergys(allergies);
-
-        medicalRecord.setMedications(medications);
-        medicalRecord.setAllergies(allergies);
-
         return person;
     }
-*/
+
     public Person toEntity(PersonDto personDto) {
         Person person = new Person();
 
@@ -94,6 +84,7 @@ public class PersonMapper {
         person.setLastName(personDto.getLastName());
         person.setEmail(personDto.getEmail());
         person.setPhone(personDto.getPhone());
+        person.setBirthdate(personDto.getBirthdate());
 
         Optional<Address> addressExist = addressRepository.findByAddress(personDto.getAddress().trim());
 
@@ -131,40 +122,5 @@ public class PersonMapper {
 
     }
 
-/*
-    private List<Allergy> findAllergyByFirstNameAndLastName(String firstName, String lastName, List<MedicalRecordDto> medicalRecordDto) {
-        List<String> s = medicalRecordDto.stream()
-                .filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName))
-                .findFirst()
-                .map(MedicalRecordDto::getAllergies)
-                .orElse(null);
-        List<Allergy> allergies = new ArrayList<>();
-        for (String allergy : s) {
-            Allergy allergy1 = new Allergy();
-            allergy1.setName(allergy);
-            allergies.add(allergy1);
-        }
-        return allergies;
-    }
-
-    private List<Medication> findMedicationByFirstNameAndLastName(String firstName, String lastName, List<MedicalRecordDto> medicalRecordDto) {
-        List<String> s = medicalRecordDto.stream()
-                .filter(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName))
-                .findFirst()
-                .map(MedicalRecordDto::getMedications)
-                .orElse(null);
-        List<Medication> medications = new ArrayList<>();
-        for (String medication : s) {
-            Medication medication1 = new Medication();
-            String[] m = medication.split(":", 0);
-            medication1.setName(m[0]);
-            medication1.setDosage(m[1]);
-
-            medications.add(medication1);
-        }
-        return medications;
-    }
-
-*/
 
 }

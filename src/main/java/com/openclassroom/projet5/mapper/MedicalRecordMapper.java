@@ -9,6 +9,8 @@ import com.openclassroom.projet5.repository.MedicationRepository;
 import com.openclassroom.projet5.repository.PersonRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,26 +49,35 @@ public class MedicalRecordMapper {
         MedicalRecord medicalRecord = new MedicalRecord();
 
         Optional<Person> personExist = personRepository.findByNames(medicalRecordDto.getFirstName(), medicalRecordDto.getLastName());
-        personExist.ifPresentOrElse((medicalRecord::setPerson),() ->{
-            PersonDto personDto = new PersonDto();
-            Person person = personMapper.toEntity(personDto);
-            medicalRecord.setPerson(person);
-        });
+        if(personExist.isPresent()){
+            medicalRecord.setPerson(personExist.get());
+        }
 
         Optional<MedicalRecord> medicalRecordExist = medicalRecordRepository.findByPerson(medicalRecordDto.getFirstName(), medicalRecordDto.getLastName());
 
+        List<Medication> medications = new ArrayList<>();
 
-        //List<Medication> medications = this.addMedication(medicalRecordDto);
-        //medicalRecord.setMedications(medications);
         List<Allergy> allergies = new ArrayList<>();
 
         if (medicalRecordExist.isPresent()){
+            medicalRecord.setId(medicalRecordExist.get().getId());
+            if(medicalRecordDto.getMedications() != null){
+                medications = this.addMedication(medicalRecordDto);
+            }
+            if(medicalRecordDto.getAllergies() != null) {
+                allergies = this.addAllergy(medicalRecordDto);
+            }
+            for (Medication medication : medicalRecordExist.get().getMedications()){
+                medications.add(medication);
+            }
             for (Allergy allergy : medicalRecordExist.get().getAllergies()){
                 allergies.add(allergy);
             }
-            allergies = this.addAllergy(medicalRecordDto);
+            medicalRecord.setMedications(medications);
             medicalRecord.setAllergies(allergies);
         }else{
+            medications = this.addMedication(medicalRecordDto);
+            medicalRecord.setMedications(medications);
             allergies = this.addAllergy(medicalRecordDto);
             medicalRecord.setAllergies(allergies);
         }
@@ -94,6 +105,7 @@ public class MedicalRecordMapper {
     }
 
     public List<Allergy> addAllergy(MedicalRecordDto medicalRecordDto) {
+
         List<String> m = medicalRecordDto.getAllergies();
         List<Allergy> allergies = new ArrayList<>();
 

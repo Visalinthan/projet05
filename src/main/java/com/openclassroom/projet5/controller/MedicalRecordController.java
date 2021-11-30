@@ -23,12 +23,26 @@ public class MedicalRecordController {
         return ResponseEntity.ok().body(medicalRecordDto);
     }
 
-    @PostMapping("/medicalRecord")
-    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@RequestBody MedicalRecordDto medicalRecordDto){
+    @PostMapping("/medicalRecord/{firstName}-{lastName}")
+    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName,@RequestBody MedicalRecordDto medicalRecordDto){
 
-        MedicalRecordDto result = medicalRecordService.save(medicalRecordDto);
+        MedicalRecordDto result = medicalRecordService.save(firstName,lastName,medicalRecordDto);
 
         return ResponseEntity.ok().body(result);
+    }
+
+    @PutMapping("/medicalRecord/{firstName}-{lastName}")
+    public ResponseEntity<MedicalRecordDto> updateMedicalRecord(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName,@RequestBody MedicalRecordDto medicalRecordDto){
+
+        MedicalRecordDto result = medicalRecordService.save(firstName,lastName,medicalRecordDto);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @DeleteMapping("/medicalRecord/{firstName}-{lastName}")
+    public ResponseEntity<?> deletePersonByNames(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName) {
+        medicalRecordService.deleteByNames(firstName,lastName);
+        return ResponseEntity.ok().build();
     }
 
 }

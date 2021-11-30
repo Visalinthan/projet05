@@ -13,6 +13,7 @@ import com.openclassroom.projet5.repository.MedicalRecordRepository;
 import com.openclassroom.projet5.repository.MedicationRepository;
 import com.openclassroom.projet5.repository.PersonRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Collection;
 import java.util.List;
@@ -73,11 +74,17 @@ public class MedicalRecordService {
                 .collect(Collectors.toList());
     }
 
-    public MedicalRecordDto save(MedicalRecordDto medicalRecordDto){
+    public MedicalRecordDto save(String firstName, String lastName, MedicalRecordDto medicalRecordDto){
+        medicalRecordDto.setFirstName(firstName);
+        medicalRecordDto.setLastName(lastName);
         MedicalRecord medicalRecord = medicalRecordMapper.toEntity(medicalRecordDto);
         medicalRecord = medicalRecordRepository.save(medicalRecord);
         return medicalRecordMapper.toDto(medicalRecord);
 
+    }
+
+    public void deleteByNames(String firstName,String lastName){
+        medicalRecordRepository.deleteByNames(firstName,lastName);
     }
 
 

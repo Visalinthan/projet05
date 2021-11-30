@@ -1,10 +1,12 @@
 package com.openclassroom.projet5.controller;
 
 import com.openclassroom.projet5.dto.PersonDto;
+import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.service.PersonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -84,10 +86,15 @@ public class PersonController {
 
     @RequestMapping(value="firestation", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<PersonDto>> getPersonsByNumberStation(@RequestParam("station_number") int StationNumber){
+    ResponseEntity<List<Object>> getPersonsByNumberStation(@RequestParam("stationNumber") int StationNumber){
         List<PersonDto> personDtos =  personService.listPersonByStationNumber(StationNumber);
-        personService.countMajorMinor(personDtos);
-        return ResponseEntity.ok().body(personDtos);
+        String age = personService.countMajorMinor(personDtos);
+        List<Object> result = new ArrayList<>();
+        for (PersonDto p : personDtos){
+            result.add(p);
+        }
+        result.add(age);
+        return ResponseEntity.ok().body(result);
     }
 
     @RequestMapping(value="childAlert", method = RequestMethod.GET)
@@ -102,6 +109,13 @@ public class PersonController {
     ResponseEntity<List<String>> getPhoneAlert(@RequestParam("firestation") int StationNumber){
         List<String> phone = personService.listPhoneByStationNumber(StationNumber);
         return ResponseEntity.ok().body(phone);
+    }
+
+    @RequestMapping(value="fire", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("address") String address){
+        List<Object> result =  personService.listPersonMedicalByAddress(address);
+        return ResponseEntity.ok().body(result);
     }
 
 

@@ -20,10 +20,10 @@ public class MedicalRecord {
     @Id
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Medication> medications = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Allergy> allergies = new ArrayList<>();
 
     @JoinColumn(name = "person_id")
