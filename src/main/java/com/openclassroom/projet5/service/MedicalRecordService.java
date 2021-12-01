@@ -1,19 +1,16 @@
 package com.openclassroom.projet5.service;
 
 import com.openclassroom.projet5.dto.MedicalRecordDto;
-import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.MedicalRecordMapper;
 import com.openclassroom.projet5.mapper.PersonMapper;
 import com.openclassroom.projet5.model.Allergy;
 import com.openclassroom.projet5.model.MedicalRecord;
 import com.openclassroom.projet5.model.Medication;
-import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.AllergyRepository;
 import com.openclassroom.projet5.repository.MedicalRecordRepository;
 import com.openclassroom.projet5.repository.MedicationRepository;
 import com.openclassroom.projet5.repository.PersonRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,23 +40,24 @@ public class MedicalRecordService {
         return medicalRecordRepository.findAll();
     }*/
 
-    public MedicalRecord save(MedicalRecord medicalRecord){
+    public MedicalRecord save(MedicalRecord medicalRecord) {
         return medicalRecordRepository.save(medicalRecord);
     }
 
-    public Allergy saveAllergy(Allergy allergy){
+    public Allergy saveAllergy(Allergy allergy) {
         return allergyRepository.save(allergy);
     }
 
-    public Medication saveMedication(Medication medication){
+    public Medication saveMedication(Medication medication) {
         return medicationRepository.save
                 (medication);
     }
-    public List<Allergy> saveAllergies(List<Allergy> allergy){
+
+    public List<Allergy> saveAllergies(List<Allergy> allergy) {
         return allergyRepository.saveAll(allergy);
     }
 
-    public List<Medication> saveMedications(List<Medication> medications){
+    public List<Medication> saveMedications(List<Medication> medications) {
         return medicationRepository.saveAll(medications);
     }
 
@@ -68,13 +66,13 @@ public class MedicalRecordService {
         return medicalRecordRepository.saveAll(medicalRecords);
     }
 
-    public List<MedicalRecordDto> list(){
+    public List<MedicalRecordDto> list() {
         return medicalRecordRepository.findAll().stream()
                 .map(medicalRecordMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public MedicalRecordDto save(String firstName, String lastName, MedicalRecordDto medicalRecordDto){
+    public MedicalRecordDto save(String firstName, String lastName, MedicalRecordDto medicalRecordDto) {
         medicalRecordDto.setFirstName(firstName);
         medicalRecordDto.setLastName(lastName);
         MedicalRecord medicalRecord = medicalRecordMapper.toEntity(medicalRecordDto);
@@ -83,10 +81,17 @@ public class MedicalRecordService {
 
     }
 
-    public void deleteByNames(String firstName,String lastName){
-        medicalRecordRepository.deleteByNames(firstName,lastName);
+    public void deleteByNames(String firstName, String lastName) {
+        medicalRecordRepository.deleteByNames(firstName, lastName);
     }
 
+    public Optional<MedicalRecordDto> listMedicalByNames(String firstName, String lastName) {
+        Optional<MedicalRecordDto> medicalRecordDto = medicalRecordRepository.findByPerson(firstName, lastName).stream()
+                .map(m->medicalRecordMapper.toDto(m))
+                .findFirst();
 
+        return medicalRecordDto;
+
+    }
 
 }

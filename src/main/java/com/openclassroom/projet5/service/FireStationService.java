@@ -76,17 +76,24 @@ public class FireStationService {
     public void delete(Long id){
         fireStationRepository.deleteById(id);
     }
-/*
-    public List<Person>  listPersonByStationNumber(int StationNumber){
-        List<Person> persons = null;
-        List<Address> AddressOfStation = fireStationRepository.findByStation(StationNumber); ;
-        List<Person> AllPerson = personRepository.findAll();
-        for (Address a : AddressOfStation) {
-            persons = personRepository.findByAddress(a);
+
+    public String stationNumberbyAddress(String address){
+        int station = fireStationRepository.findFireStationByAddress(address);
+        String s = "N° station :"+ station;
+        return s;
+    }
+
+    public List<Address> listAddressByStations(List<Integer>station){
+        List<Address> addresses = new ArrayList<>();
+        for (int i : station){
+            List<Address> addressesFind = fireStationRepository.findAddressByStation(i);
+            for (Address a :addressesFind) {
+                addresses.add(a);
+            }
+
         }
 
-        return persons;
+        return addresses;
     }
-*/
 
 }

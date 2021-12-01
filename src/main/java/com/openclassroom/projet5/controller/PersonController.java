@@ -1,22 +1,31 @@
 package com.openclassroom.projet5.controller;
 
+import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.dto.PersonDto;
+import com.openclassroom.projet5.model.Address;
 import com.openclassroom.projet5.model.Person;
+import com.openclassroom.projet5.service.FireStationService;
+import com.openclassroom.projet5.service.MedicalRecordService;
 import com.openclassroom.projet5.service.PersonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
 public class PersonController {
 
     private final PersonService personService;
+    private final MedicalRecordService medicalRecordService;
+    private final FireStationService fireStationService;
 
-    public PersonController(PersonService personService) {
+    public PersonController(PersonService personService, MedicalRecordService medicalRecordService, FireStationService fireStationService) {
         this.personService = personService;
+        this.medicalRecordService = medicalRecordService;
+        this.fireStationService = fireStationService;
     }
 
     @GetMapping("/person")
@@ -24,13 +33,6 @@ public class PersonController {
         List<PersonDto> persons = personService.list();
         return ResponseEntity.ok().body(persons);
     }
-
-
-   /* @GetMapping("/person/{id}")
-    public ResponseEntity<Optional<PersonDto>> getPersonById(@PathVariable("id") long id) {
-        Optional<PersonDto> person = personService.personById(id);
-        return ResponseEntity.ok().body(person);
-    }*/
 
 
     @PostMapping("/person")
@@ -66,17 +68,6 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
-   /*@DeleteMapping("/person/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
-            personService.delete(id);
-            return ResponseEntity.ok().build();
-        } catch (PersonNotFound e) {
-            e.printStackTrace();
-            return ResponseEntity.notFound().build();
-        }
-
-    }*/
 
     @DeleteMapping("/person/{firstName}-{lastName}")
     public ResponseEntity<?> deletePersonByNames(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName) {
@@ -114,7 +105,85 @@ public class PersonController {
     @RequestMapping(value="fire", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("address") String address){
-        List<Object> result =  personService.listPersonMedicalByAddress(address);
+        List<Object> result = new ArrayList<>();
+        List<PersonDto> personDto =  personService.listPersonByAddress(address);
+
+        for (PersonDto p : personDto){
+            List<Object> obj = new ArrayList<>();
+            Optional<MedicalRecordDto> medicalRecordDto = medicalRecordService.listMedicalByNames(p.getFirstName(), p.getLastName());
+
+            obj.add(p.getFirstName() +" "+ p.getLastName());
+            obj.add(p.getPhone());
+            Person person = new Person();
+            Long age = person.CalculAge(p.getBirthdate());
+            obj.add(age +" ans");
+            if(medicalRecordDto.isPresent()) {
+                obj.add("Medications : " + medicalRecordDto.get().getMedications());
+                obj.add("Allergies : " + medicalRecordDto.get().getAllergies());
+            }
+            String s= fireStationService.stationNumberbyAddress(address);
+            obj.add(s);
+            result.add(obj);
+        }
+
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @RequestMapping(value="flood/stations", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("station") List<Integer> stations){
+        List<Object> result = new ArrayList<>();
+        List<Address> addresses = fireStationService.listAddressByStations(stations);
+        for (Address a :addresses){
+            result.add(this.getPersonsMedicalsByAddress(a.getAddress()).getBody());
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @RequestMapping(value="personInfo", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<Object>> getPersonsInfo(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
+        List<Object> result = new ArrayList<>();
+        List<PersonDto> persons = personService.list();
+
+        for (PersonDto p : persons){
+            List<Object> obj = new ArrayList<>();
+            if(p.getFirstName().equals(firstName) || p.getLastName().equals(lastName)){
+                obj.add(p.getFirstName() +" "+p.getLastName());
+                obj.add(p.getEmail());
+
+                Person person = new Person();
+                Long age = person.CalculAge(p.getBirthdate());
+                obj.add(age +" ans");
+
+                Optional<MedicalRecordDto> medicalRecordDto = medicalRecordService.listMedicalByNames(p.getFirstName(), p.getLastName());
+
+                if(medicalRecordDto.isPresent()) {
+                    obj.add("Medications : " + medicalRecordDto.get().getMedications());
+                    obj.add("Allergies : " + medicalRecordDto.get().getAllergies());
+                }
+                result.add(obj);
+            }
+
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @RequestMapping(value="communityEmail", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<List<String>> communityEmail(@RequestParam("city") String city){
+        List<String> result = new ArrayList<>();
+        List<PersonDto> persons = personService.list();
+
+        for (PersonDto p : persons){
+            if(p.getCity().equals(city)){
+                result.add(p.getEmail());
+            }
+        }
+
         return ResponseEntity.ok().body(result);
     }
 

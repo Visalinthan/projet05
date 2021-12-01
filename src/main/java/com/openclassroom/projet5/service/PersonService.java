@@ -4,6 +4,7 @@ import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.mapper.MedicalRecordMapper;
 import com.openclassroom.projet5.mapper.PersonMapper;
+import com.openclassroom.projet5.model.Address;
 import com.openclassroom.projet5.model.FireStation;
 import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.FireStationRepository;
@@ -22,17 +23,11 @@ import java.util.stream.Collectors;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final MedicalRecordRepository medicalRecordRepository;
     private final PersonMapper personMapper;
-    private final MedicalRecordMapper medicalRecordMapper;
-    private final FireStationRepository fireStationRepository;
 
-    public PersonService(PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, PersonMapper personMapper, MedicalRecordMapper medicalRecordMapper, FireStationRepository fireStationRepository) {
+    public PersonService(PersonRepository personRepository, PersonMapper personMapper) {
         this.personRepository = personRepository;
-        this.medicalRecordRepository = medicalRecordRepository;
-        this.personMapper = personMapper;
-        this.medicalRecordMapper = medicalRecordMapper;
-        this.fireStationRepository = fireStationRepository;
+        this.personMapper = personMapper;;
     }
 
 
@@ -127,29 +122,12 @@ public class PersonService {
         return phoneNumber;
     }
 
-
-    public List<Object> listPersonMedicalByAddress(String address){
+    public List<PersonDto> listPersonByAddress(String address){
         List<Object> obj = new ArrayList<>();
         List<PersonDto> personDto =  personRepository.findPersonByAddress(address).stream()
                 .map(personMapper::toDto)
                 .collect(Collectors.toList());
-
-        for (PersonDto p :personDto){
-            Optional<MedicalRecordDto> m = medicalRecordRepository.findByPerson(p.getFirstName(),p.getLastName()).stream()
-                    .map(medical -> medicalRecordMapper.toDto(medical))
-                    .findFirst();
-            obj.add("Person : " + p);
-            if(m.isPresent()) {
-                obj.add("Medications : " + m.get().getMedications());
-                obj.add("Allergies : " + m.get().getAllergies());
-            }
-        }
-        int station = fireStationRepository.findFireStationByAddress(address);
-        String s = "Le n° station est "+ station;
-
-        obj.add(s);
-
-        return obj;
+        return personDto;
     }
 
 
