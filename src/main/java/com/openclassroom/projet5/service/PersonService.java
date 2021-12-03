@@ -1,17 +1,12 @@
 package com.openclassroom.projet5.service;
 
-import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.dto.PersonDto;
-import com.openclassroom.projet5.mapper.MedicalRecordMapper;
 import com.openclassroom.projet5.mapper.PersonMapper;
-import com.openclassroom.projet5.model.Address;
-import com.openclassroom.projet5.model.FireStation;
 import com.openclassroom.projet5.model.Person;
-import com.openclassroom.projet5.repository.FireStationRepository;
-import com.openclassroom.projet5.repository.MedicalRecordRepository;
 import com.openclassroom.projet5.repository.PersonRepository;
 import com.openclassroom.projet5.service.exception.PersonNotFound;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Component
 public class PersonService {
 
     private final PersonRepository personRepository;

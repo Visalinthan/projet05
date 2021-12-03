@@ -25,5 +25,4 @@ public class PersonDto {
     private Integer zip;
     private String city;
 
-
 }
