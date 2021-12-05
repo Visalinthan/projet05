@@ -55,19 +55,5 @@ public class FireStationController {
         fireStationService.delete(id);
         return ResponseEntity.ok().build();
     }
-/*
-    @RequestMapping(value="firestations", method = RequestMethod.GET)
-    public @ResponseBody
-    ResponseEntity<List<Person>> getPersonsByNumberStation(@RequestParam("stationNumber") int StationNumber){
-        List<Person>  personDto =  fireStationService.listPersonByStationNumber(StationNumber);
-        return ResponseEntity.ok().body(personDto);
-    }
 
- */
-
-  /*  @GetMapping("/firestations")
-    public ResponseEntity<List<FireStationDto>> getPersonsByNumberStation(@RequestParam int stationNumber) {
-            List<FireStationDto> fireStationDto =  fireStationRepository.findByStation(stationNumber).stream().collect(Collectors.toList());
-            return ResponseEntity.ok().body(fireStationDto);
-    }*/
 }

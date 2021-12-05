@@ -132,7 +132,7 @@ public class PersonController {
 
     @RequestMapping(value="flood/stations", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("station") List<Integer> stations){
+    ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("stations") List<Integer> stations){
         List<Object> result = new ArrayList<>();
         List<Address> addresses = fireStationService.listAddressByStations(stations);
         for (Address a :addresses){

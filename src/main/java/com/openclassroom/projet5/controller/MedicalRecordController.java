@@ -17,7 +17,7 @@ public class MedicalRecordController {
         this.medicalRecordService = medicalRecordService;
     }
 
-    @GetMapping("/medicalRecords")
+    @GetMapping("/medicalRecord")
     public ResponseEntity<List<MedicalRecordDto>> getMedicalRecords() {
         List<MedicalRecordDto> medicalRecordDto = medicalRecordService.list();
         return ResponseEntity.ok().body(medicalRecordDto);

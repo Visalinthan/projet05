@@ -37,6 +37,7 @@ public class MedicalRecordMapper {
 
         medicalRecordDto.setFirstName(medicalRecord.getPerson().getFirstName());
         medicalRecordDto.setLastName(medicalRecord.getPerson().getLastName());
+        medicalRecordDto.setBirthDate(medicalRecord.getPerson().getBirthdate().toString());
         List<String> allergies = convertAllergies(medicalRecord.getAllergies());
         medicalRecordDto.setAllergies(allergies);
         List<String> medications = convertMedications(medicalRecord.getMedications());

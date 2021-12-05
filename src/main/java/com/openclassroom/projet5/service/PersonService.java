@@ -70,6 +70,7 @@ public class PersonService {
             personUpdate.setAddress(personDto.getAddress());
             personUpdate.setCity(personDto.getCity());
             personUpdate.setZip(personDto.getZip());
+
             Person person = personMapper.toEntity(personUpdate);
             person = personRepository.save(person);
             updatedPerson = personMapper.toDto(person);
