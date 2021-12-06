@@ -5,6 +5,7 @@ import com.openclassroom.projet5.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class AddressService {
@@ -15,7 +16,7 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Iterable<Address> list(){
+    public List<Address> list(){
         return addressRepository.findAll();
     }
 

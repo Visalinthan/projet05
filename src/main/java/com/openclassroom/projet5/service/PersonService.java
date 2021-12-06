@@ -120,7 +120,6 @@ public class PersonService {
     }
 
     public List<PersonDto> listPersonByAddress(String address){
-        List<Object> obj = new ArrayList<>();
         List<PersonDto> personDto =  personRepository.findPersonByAddress(address).stream()
                 .map(personMapper::toDto)
                 .collect(Collectors.toList());

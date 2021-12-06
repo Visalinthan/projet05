@@ -36,13 +36,8 @@ public class FireStationService {
         return fireStationRepository.saveAll(fireStations);
     }
 
-    public Iterable<FireStation> listFireStation(){
-        return fireStationRepository.findAll();
-    }
-
     public List<FireStationDto> list(){
-        List<FireStation> fireStations = fireStationRepository.findAll();
-        return fireStations.stream()
+        return fireStationRepository.findAll().stream()
                 .map(fireStationMapper::toDto)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
