@@ -121,7 +121,7 @@ public class PersonController {
                 obj.add("Medications : " + medicalRecordDto.get().getMedications());
                 obj.add("Allergies : " + medicalRecordDto.get().getAllergies());
             }
-            String s= fireStationService.stationNumberbyAddress(address);
+            String s= fireStationService.stationNumberByAddress(address);
             obj.add(s);
             result.add(obj);
         }

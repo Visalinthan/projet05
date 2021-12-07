@@ -13,11 +13,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FireStationServiceTest {
@@ -43,7 +44,7 @@ class FireStationServiceTest {
         address.setZip(93330);
         address.setCity("lyon");
         fireStation.setAddress(address);
-        fireStation.setStation(1);
+        fireStation.setStation(6);
 
         return fireStation;
     }
@@ -54,7 +55,7 @@ class FireStationServiceTest {
         fireStationDto.setAddress("10 rue jo");
         fireStationDto.setZip(93330);
         fireStationDto.setCity("lyon");
-        fireStationDto.setStation(1);
+        fireStationDto.setStation(6);
         return fireStationDto;
     }
 
@@ -66,7 +67,8 @@ class FireStationServiceTest {
         when(fireStationRepository.findAll()).thenReturn(fireStations);
         when(fireStationMapper.toDto((FireStation) any())).thenReturn(getFireStationDto());
 
-        assertThat(fireStationService.list().get(0)).isEqualTo(getFireStationDto());
+        FireStationDto fireStationDto = getFireStationDto() ;
+        assertThat(fireStationService.list().get(0).getId()).isEqualTo(getFireStationDto().getId());
 
     }
 
@@ -80,21 +82,40 @@ class FireStationServiceTest {
     }
 
 
-
-
     @Test
     public void update() {
+        FireStationDto fireStationDto = getFireStationDto();
+
+        when(fireStationRepository.findById(fireStationDto.getId())).thenReturn(Optional.of(getFireStation()));
+        when(fireStationMapper.toDto((FireStation) any())).thenReturn(getFireStationDto());
+
+        assertThat(fireStationService.update(fireStationDto.getId(),fireStationDto).getId()).isEqualTo(fireStationDto.getId());
     }
 
     @Test
     public void delete() {
+        FireStation fireStation = getFireStation();
+
+        fireStationService.delete(fireStation.getId());
+
+        verify(fireStationRepository, times(1)).deleteById(fireStation.getId());
     }
 
     @Test
-    public void stationNumberbyAddress() {
+    public void stationNumberByAddress() {
+        FireStation fireStation = getFireStation();
+        int station;
+        String address;
+
+        when(fireStationRepository.findFireStationByAddress(anyString())).thenReturn(fireStation.getStation());
+        address = fireStation.getAddress().getAddress();
+        station = fireStationRepository.findFireStationByAddress(address);
+
+        assertThat(fireStationService.stationNumberByAddress(address)).isEqualTo("N° station :"+ station);
     }
 
     @Test
     public void listAddressByStations() {
+
     }
 }

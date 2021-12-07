@@ -4,16 +4,19 @@ import com.openclassroom.projet5.dto.FireStationDto;
 import com.openclassroom.projet5.mapper.FireStationMapper;
 import com.openclassroom.projet5.model.Address;
 import com.openclassroom.projet5.model.FireStation;
-import com.openclassroom.projet5.model.Person;
 import com.openclassroom.projet5.repository.AddressRepository;
 import com.openclassroom.projet5.repository.FireStationRepository;
 import com.openclassroom.projet5.repository.PersonRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@Component
 public class FireStationService {
 
     private FireStationRepository fireStationRepository;
@@ -72,7 +75,7 @@ public class FireStationService {
         fireStationRepository.deleteById(id);
     }
 
-    public String stationNumberbyAddress(String address){
+    public String stationNumberByAddress(String address){
         int station = fireStationRepository.findFireStationByAddress(address);
         String s = "N° station :"+ station;
         return s;
