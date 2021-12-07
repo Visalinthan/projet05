@@ -72,7 +72,7 @@ public class PersonServiceTest {
 
 
     @Test
-    public void list() {
+    public void checkListFirstPerson() {
 
         List<Person> personList = new ArrayList<>();
         personList.add(getPerson());
@@ -84,7 +84,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void save() {
+    public void checkSavePerson() {
         PersonDto personDto = getPersonDto();
 
         when(personMapper.toEntity((PersonDto) any())).thenReturn(getPerson());
@@ -95,7 +95,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void update() {
+    public void checkUpdatePerson() {
         PersonDto personDto = getPersonDto();
 
         when(personRepository.findById(personDto.getId())).thenReturn(Optional.of(getPerson()));
@@ -105,7 +105,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void deleteByNames() {
+    public void verifyDeleteByNames() {
         PersonDto personDtoList = getPersonDto();
         doNothing().when(personRepository).deleteByNames(personDtoList.getFirstName(),personDtoList.getLastName());
 
@@ -115,7 +115,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void personById() {
+    public void checkGetPersonById() {
         List<PersonDto> personDtoList = new ArrayList<>();
         personDtoList.add(getPersonDto());
 
@@ -128,7 +128,7 @@ public class PersonServiceTest {
 
 
     @Test
-    public void listPersonByStationNumber() {
+    public void checkListPersonByStationNumber() {
         List<Person> personList = new ArrayList<>();
         personList.add(getPerson());
 
@@ -141,24 +141,36 @@ public class PersonServiceTest {
 
 
     @Test
-    public void countMajorMinor() {
+    public void checkCountMajor() {
         List<PersonDto> personDtoList = new ArrayList<>();
         List<Person> personList = new ArrayList<>();
+        Long nbMajor;
         personDtoList.add(getPersonDto());
         personList.add(getPerson());
-        Long nbMinor ;
-        Long nbMajor;
+
+        when(personMapper.toEntity((PersonDto) any())).thenReturn(getPerson());
+        nbMajor = personList.stream().filter(person -> person.CalculAge(person.getBirthdate())>=18).count();
+
+        assertThat(personService.countMajor(personDtoList)).isEqualTo(nbMajor);
+    }
+
+    @Test
+    public void checkCountMinor() {
+        List<PersonDto> personDtoList = new ArrayList<>();
+        List<Person> personList = new ArrayList<>();
+        Long nbMinor;
+        personDtoList.add(getPersonDto());
+        personList.add(getPerson());
 
         when(personMapper.toEntity((PersonDto) any())).thenReturn(getPerson());
         nbMinor = personList.stream().filter(person -> person.CalculAge(person.getBirthdate())<=18).count();
-        nbMajor = personList.stream().filter(person -> person.CalculAge(person.getBirthdate())>=18).count();
 
-        assertThat(personService.countMajorMinor(personDtoList)).isEqualTo("Nombre d'adultes : "+ nbMajor + " Nombre d'enfants : "+ nbMinor);
+        assertThat(personService.countMinor(personDtoList)).isEqualTo(nbMinor);
     }
 
 
     @Test
-    public void listChildAlert() {
+    public void checkListChildAlert() {
         List<Person> personList = new ArrayList<>();
         personList.add(getPerson());
 
@@ -168,7 +180,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void listPhoneByStationNumber() {
+    public void checkListPhoneByStationNumber() {
         List<Person> person = new ArrayList<>();
         person.add(getPerson());
 
@@ -178,7 +190,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void listPersonByAddress() {
+    public void checkListPersonByAddress() {
         List<PersonDto> personDtoList = new ArrayList<>();
         List<Person> personList = new ArrayList<>();
         personDtoList.add(getPersonDto());

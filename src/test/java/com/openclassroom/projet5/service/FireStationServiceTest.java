@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FireStationServiceTest {
+public class FireStationServiceTest {
 
     @InjectMocks
     private FireStationService fireStationService;
@@ -33,6 +33,7 @@ class FireStationServiceTest {
     private FireStationMapper fireStationMapper;
 
     private static Long id = 1L;
+
 
     private static FireStation getFireStation(){
         Address address = new Address();
@@ -60,20 +61,19 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void list() {
+    public void checkFirstFireStationList() {
         List<FireStation> fireStations = new ArrayList<>();
         fireStations.add(getFireStation());
 
         when(fireStationRepository.findAll()).thenReturn(fireStations);
         when(fireStationMapper.toDto((FireStation) any())).thenReturn(getFireStationDto());
 
-        FireStationDto fireStationDto = getFireStationDto() ;
         assertThat(fireStationService.list().get(0).getId()).isEqualTo(getFireStationDto().getId());
 
     }
 
     @Test
-    public void save() {
+    public void checkSaveFireStation() {
         FireStation fireStation = getFireStation();
 
         when(fireStationRepository.save(any())).thenReturn(getFireStation());
@@ -83,7 +83,7 @@ class FireStationServiceTest {
 
 
     @Test
-    public void update() {
+    public void checkUpdateFireStation() {
         FireStationDto fireStationDto = getFireStationDto();
 
         when(fireStationRepository.findById(fireStationDto.getId())).thenReturn(Optional.of(getFireStation()));
@@ -93,7 +93,7 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void delete() {
+    public void verifyDeleteFireStation() {
         FireStation fireStation = getFireStation();
 
         fireStationService.delete(fireStation.getId());
@@ -102,7 +102,7 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void stationNumberByAddress() {
+    public void checkStationNumberByAddress() {
         FireStation fireStation = getFireStation();
         int station;
         String address;
@@ -111,11 +111,7 @@ class FireStationServiceTest {
         address = fireStation.getAddress().getAddress();
         station = fireStationRepository.findFireStationByAddress(address);
 
-        assertThat(fireStationService.stationNumberByAddress(address)).isEqualTo("N° station :"+ station);
+        assertThat(fireStationService.stationNumberByAddress(address)).isEqualTo(station);
     }
 
-    @Test
-    public void listAddressByStations() {
-
-    }
 }

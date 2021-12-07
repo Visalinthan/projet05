@@ -4,6 +4,7 @@ import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.model.Address;
 import com.openclassroom.projet5.model.Person;
+import com.openclassroom.projet5.service.AddressService;
 import com.openclassroom.projet5.service.FireStationService;
 import com.openclassroom.projet5.service.MedicalRecordService;
 import com.openclassroom.projet5.service.PersonService;
@@ -21,11 +22,13 @@ public class PersonController {
     private final PersonService personService;
     private final MedicalRecordService medicalRecordService;
     private final FireStationService fireStationService;
+    private final AddressService addressService;
 
-    public PersonController(PersonService personService, MedicalRecordService medicalRecordService, FireStationService fireStationService) {
+    public PersonController(PersonService personService, MedicalRecordService medicalRecordService, FireStationService fireStationService, AddressService addressService) {
         this.personService = personService;
         this.medicalRecordService = medicalRecordService;
         this.fireStationService = fireStationService;
+        this.addressService = addressService;
     }
 
     @GetMapping("/person")
@@ -79,12 +82,14 @@ public class PersonController {
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsByNumberStation(@RequestParam("stationNumber") int StationNumber){
         List<PersonDto> personDtos =  personService.listPersonByStationNumber(StationNumber);
-        String age = personService.countMajorMinor(personDtos);
+        Long nbMajor = personService.countMajor(personDtos);
+        Long nbMinor = personService.countMinor(personDtos);
+        String countAge = "Nombre d'adultes : "+ nbMajor + " Nombre d'enfants : "+ nbMinor;
         List<Object> result = new ArrayList<>();
         for (PersonDto p : personDtos){
             result.add(p);
         }
-        result.add(age);
+        result.add(countAge);
         return ResponseEntity.ok().body(result);
     }
 
@@ -121,7 +126,8 @@ public class PersonController {
                 obj.add("Medications : " + medicalRecordDto.get().getMedications());
                 obj.add("Allergies : " + medicalRecordDto.get().getAllergies());
             }
-            String s= fireStationService.stationNumberByAddress(address);
+            int station= fireStationService.stationNumberByAddress(address);
+            String s = "N° station "+station;
             obj.add(s);
             result.add(obj);
         }
@@ -134,7 +140,7 @@ public class PersonController {
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("stations") List<Integer> stations){
         List<Object> result = new ArrayList<>();
-        List<Address> addresses = fireStationService.listAddressByStations(stations);
+        List<Address> addresses = addressService.listAddressByStations(stations);
         for (Address a :addresses){
             result.add(this.getPersonsMedicalsByAddress(a.getAddress()).getBody());
         }

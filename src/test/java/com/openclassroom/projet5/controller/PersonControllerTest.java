@@ -47,10 +47,6 @@ public class PersonControllerTest {
     }
 
     @Test
-    public void createPerson() {
-    }
-
-    @Test
     public void updatePerson() {
     }
 

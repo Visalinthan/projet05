@@ -36,29 +36,9 @@ public class MedicalRecordService {
         this.medicationRepository = medicationRepository;
     }
 
-    /*public Iterable<MedicalRecord> list(){
-        return medicalRecordRepository.findAll();
-    }*/
 
     public MedicalRecord save(MedicalRecord medicalRecord) {
         return medicalRecordRepository.save(medicalRecord);
-    }
-
-    public Allergy saveAllergy(Allergy allergy) {
-        return allergyRepository.save(allergy);
-    }
-
-    public Medication saveMedication(Medication medication) {
-        return medicationRepository.save
-                (medication);
-    }
-
-    public List<Allergy> saveAllergies(List<Allergy> allergy) {
-        return allergyRepository.saveAll(allergy);
-    }
-
-    public List<Medication> saveMedications(List<Medication> medications) {
-        return medicationRepository.saveAll(medications);
     }
 
 

@@ -75,23 +75,12 @@ public class FireStationService {
         fireStationRepository.deleteById(id);
     }
 
-    public String stationNumberByAddress(String address){
+    public int stationNumberByAddress(String address){
         int station = fireStationRepository.findFireStationByAddress(address);
-        String s = "N° station :"+ station;
+        int s = station;
         return s;
     }
 
-    public List<Address> listAddressByStations(List<Integer>station){
-        List<Address> addresses = new ArrayList<>();
-        for (int i : station){
-            List<Address> addressesFind = fireStationRepository.findAddressByStation(i);
-            for (Address a :addressesFind) {
-                addresses.add(a);
-            }
 
-        }
-
-        return addresses;
-    }
 
 }
