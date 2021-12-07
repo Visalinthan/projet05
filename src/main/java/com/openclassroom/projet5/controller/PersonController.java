@@ -49,22 +49,9 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PutMapping("/person")
-    public ResponseEntity<PersonDto> updatePerson(@RequestBody  PersonDto personDto) throws Exception {
-        if (personDto.getId() == null) {
-            throw new Exception("Person id not found !");
-        }
-
-        PersonDto result = personService.save(personDto);
-
-        return ResponseEntity.ok().body(result);
-    }
 
     @PutMapping("/person/{id}")
-    public ResponseEntity<PersonDto> updatePersonById(@PathVariable("id") long id,@RequestBody  PersonDto personDto) throws Exception {
-       /* if (personDto.getId() == null) {
-            throw new Exception("Person id not found !");
-        }*/
+    public ResponseEntity<PersonDto> updatePersonById(@PathVariable("id") long id,@RequestBody  PersonDto personDto){
 
         PersonDto result = personService.update(id,personDto);
 
@@ -72,8 +59,8 @@ public class PersonController {
     }
 
 
-    @DeleteMapping("/person/{firstName}-{lastName}")
-    public ResponseEntity<?> deletePersonByNames(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName) {
+    @DeleteMapping("/person")
+    public ResponseEntity<?> deletePersonByNames(@RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName) {
         personService.deleteByNames(firstName,lastName);
         return ResponseEntity.ok().build();
     }

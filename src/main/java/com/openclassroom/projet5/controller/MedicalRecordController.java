@@ -23,8 +23,8 @@ public class MedicalRecordController {
         return ResponseEntity.ok().body(medicalRecordDto);
     }
 
-    @PostMapping("/medicalRecord/{firstName}-{lastName}")
-    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@PathVariable("firstName") String firstName,@PathVariable("lastName") String lastName,@RequestBody MedicalRecordDto medicalRecordDto){
+    @PostMapping("/medicalRecord")
+    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName,@RequestBody MedicalRecordDto medicalRecordDto){
 
         MedicalRecordDto result = medicalRecordService.save(firstName,lastName,medicalRecordDto);
 
