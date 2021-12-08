@@ -57,9 +57,6 @@ public class PersonControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void updatePerson() {
-    }
 
     @Test
     public void updatePersonById() {
@@ -67,7 +64,12 @@ public class PersonControllerTest {
 
     @Test
     public void deletePersonByNames() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/person/{firstName}-{lastName}",1)).andExpect(status().isOk());
+        String firstName = "Jack";
+        String lastName = "s";
+        mockMvc.perform(MockMvcRequestBuilders.delete("/person",1)
+                .param("firstName", firstName)
+                .param("lastName", lastName)
+        ).andExpect(status().isOk());
     }
 
     @Test

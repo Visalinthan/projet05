@@ -50,7 +50,7 @@ public class FireStationController {
         return ResponseEntity.ok().body(result);
     }
 
-    @DeleteMapping("firestation/{id}")
+    @DeleteMapping("/firestation/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         fireStationService.delete(id);
         return ResponseEntity.ok().build();
