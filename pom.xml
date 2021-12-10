@@ -64,7 +64,6 @@
 			<artifactId>maven-surefire-plugin</artifactId>
 			<version>3.0.0-M5</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -88,6 +87,16 @@
 					<source>9</source>
 					<target>9</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.0.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
