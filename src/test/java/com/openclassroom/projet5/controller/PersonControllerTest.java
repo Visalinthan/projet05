@@ -59,7 +59,21 @@ public class PersonControllerTest {
 
 
     @Test
-    public void updatePersonById() {
+    public void updatePersonById() throws Exception {
+        ObjectMapper obj = new ObjectMapper();
+        ObjectNode node = obj.createObjectNode();
+        node.set("firstName", TextNode.valueOf("vishal"));
+        node.set("lasName", TextNode.valueOf("jo"));
+        node.set("email", TextNode.valueOf("mail@gamil.com"));
+        node.set("birthdate", TextNode.valueOf("1984-03-06"));
+        node.set("address", TextNode.valueOf("2 rue r"));
+        node.set("zip", TextNode.valueOf("93330"));
+        node.set("city", TextNode.valueOf("ville"));
+
+        String jsonPerson = node.toString();
+        mockMvc.perform(MockMvcRequestBuilders.put("/person/{id}",1).contentType(MediaType.APPLICATION_JSON).content(jsonPerson))
+                .andExpect(status().isOk());
+
     }
 
     @Test
@@ -73,30 +87,68 @@ public class PersonControllerTest {
     }
 
     @Test
-    public void getPersonsByNumberStation() {
+    public void getPersonsByNumberStation() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/firestation")
+                        .param("stationNumber","2")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void getChildAlert() {
+    public void getChildAlert() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/childAlert")
+                        .param("address","2 rue re")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void getPhoneAlert() {
+    public void getPhoneAlert() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/phoneAlert")
+                        .param("firestation", "2")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void getPersonsMedicalsByAddress() {
+    public void getPersonsMedicalsByAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/fire")
+                        .param("address", "2 rue michelet")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetPersonsMedicalsByAddress() {
+    public void testGetPersonsMedicalsByAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/flood/stations")
+                        .param("stations", "1,3")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void getPersonsInfo() {
+    public void getPersonsInfo() throws Exception {
+        String firstName = "Jack";
+        String lastName = "s";
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/personInfo")
+                        .param("firstName", firstName)
+                        .param("lastName", lastName)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void communityEmail() {
+    public void communityEmail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/communityEmail")
+                        .param("city", "torcy")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

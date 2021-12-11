@@ -28,32 +28,45 @@ class MedicalRecordControllerTest {
     @Test
     void getMedicalRecords() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/medicalRecord")
-                .accept(MediaType.APPLICATION_JSON))
+                        .get("/medicalRecord")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
- @Test
+    @Test
     void createMedicalRecord() throws Exception {
-   /*        String firstName = "Jack";
-        String lastName = "s";
+        String firstName = "John";
+        String lastName = "Boyd";
 
         ObjectMapper obj = new ObjectMapper();
-        ArrayNode nodeArray = obj.createArrayNode();
         ObjectNode node = obj.createObjectNode();
-        node.set("medications", nodeArray.insert(1, node.textNode("doliprane:100mg")));
-        //node.set("allergies", nodeArray.insert(2,"pollen"));
+        ArrayNode array = obj.createArrayNode();
+        node.set("allergies",array.add("pollen"));
 
         String jsonMedicalRecord = node.toString();
         mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord")
-                .param("firstName", firstName)
-                .param("lastName", lastName)
-                .contentType(MediaType.APPLICATION_JSON).content(jsonMedicalRecord))
-                .andExpect(status().isOk());*/
+                        .param("firstName", firstName)
+                        .param("lastName", lastName)
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonMedicalRecord))
+                .andExpect(status().isOk());
     }
 
     @Test
-    void updateMedicalRecord() {
+    void updateMedicalRecord() throws Exception {
+        String firstName = "John";
+        String lastName = "Boyd";
+
+        ObjectMapper obj = new ObjectMapper();
+        ObjectNode node = obj.createObjectNode();
+        ArrayNode array = obj.createArrayNode();
+        node.set("allergies",array.add("pollen"));
+
+        String jsonMedicalRecord = node.toString();
+        mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord")
+                        .param("firstName", firstName)
+                        .param("lastName", lastName)
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonMedicalRecord))
+                .andExpect(status().isOk());
     }
 
     @Test

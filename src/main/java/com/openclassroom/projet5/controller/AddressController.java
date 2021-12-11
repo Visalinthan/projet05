@@ -18,7 +18,6 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @GetMapping("/addresses")
     public Iterable<Address> list(){
         return addressService.list();
     }

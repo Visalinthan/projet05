@@ -49,7 +49,18 @@ class FireStationControllerTest {
     }
 
     @Test
-    void updateFireStation() {
+    void updateFireStation() throws Exception {
+        ObjectMapper obj = new ObjectMapper();
+        ObjectNode node = obj.createObjectNode();
+
+        node.set("address", TextNode.valueOf("2 rue r"));
+        node.set("zip", TextNode.valueOf("93330"));
+        node.set("city", TextNode.valueOf("ville"));
+        node.set("station", TextNode.valueOf("5"));
+
+        String jsonFireStation = node.toString();
+        mockMvc.perform(MockMvcRequestBuilders.put("/firestation/{id}",1).contentType(MediaType.APPLICATION_JSON).content(jsonFireStation))
+                .andExpect(status().isOk());
     }
 
     @Test
