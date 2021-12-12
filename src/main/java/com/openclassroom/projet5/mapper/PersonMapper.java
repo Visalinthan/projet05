@@ -4,17 +4,11 @@ import com.openclassroom.projet5.dto.MedicalRecordDto;
 import com.openclassroom.projet5.dto.PersonDto;
 import com.openclassroom.projet5.model.*;
 import com.openclassroom.projet5.repository.AddressRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.openclassroom.projet5.repository.MedicationRepository;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
-import java.beans.Transient;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

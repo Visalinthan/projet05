@@ -46,6 +46,7 @@ public class MedicalRecordMapper {
         return medicalRecordDto;
     }
 
+
     public MedicalRecord toEntity(MedicalRecordDto medicalRecordDto){
         MedicalRecord medicalRecord = new MedicalRecord();
 

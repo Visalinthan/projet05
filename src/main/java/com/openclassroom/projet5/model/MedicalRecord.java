@@ -6,6 +6,8 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
@@ -21,13 +23,16 @@ public class MedicalRecord {
     private Long id;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Medication> medications = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Allergy> allergies = new ArrayList<>();
 
     @JoinColumn(name = "person_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Person person;
 
 

@@ -33,13 +33,10 @@ public class Person {
     @JoinColumn(name = "address_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Address address;
-/*
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Medication> medications;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Allergy> allergys;
-*/
+    @OneToOne(mappedBy = "person")
+    private MedicalRecord medicalRecord;
+
     public Long CalculAge(LocalDate birthdate) {
         return LocalDate.from(birthdate).until(LocalDate.now(), ChronoUnit.YEARS);
     }
