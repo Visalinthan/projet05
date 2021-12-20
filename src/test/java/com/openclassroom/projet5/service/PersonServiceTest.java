@@ -149,7 +149,7 @@ public class PersonServiceTest {
         personList.add(getPerson());
 
         when(personMapper.toEntity((PersonDto) any())).thenReturn(getPerson());
-        nbMajor = personList.stream().filter(person -> person.CalculAge(person.getBirthdate())>=18).count();
+        nbMajor = personList.stream().filter(person -> person.calculAge(person.getBirthdate())>=18).count();
 
         assertThat(personService.countMajor(personDtoList)).isEqualTo(nbMajor);
     }
@@ -163,7 +163,7 @@ public class PersonServiceTest {
         personList.add(getPerson());
 
         when(personMapper.toEntity((PersonDto) any())).thenReturn(getPerson());
-        nbMinor = personList.stream().filter(person -> person.CalculAge(person.getBirthdate())<=18).count();
+        nbMinor = personList.stream().filter(person -> person.calculAge(person.getBirthdate())<=18).count();
 
         assertThat(personService.countMinor(personDtoList)).isEqualTo(nbMinor);
     }
@@ -176,7 +176,7 @@ public class PersonServiceTest {
 
         when(personRepository.findPersonByAddress(anyString())).thenReturn(personList);
 
-        assertThat(personService.listChildAlert("10 rue jo")).isEqualTo(personList.stream().filter(person1 -> person1.CalculAge(person1.getBirthdate())<=18).collect(Collectors.toList()));
+        assertThat(personService.listChildAlert("10 rue jo")).isEqualTo(personList.stream().filter(person1 -> person1.calculAge(person1.getBirthdate())<=18).collect(Collectors.toList()));
     }
 
     @Test

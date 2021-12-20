@@ -34,7 +34,7 @@ public class FireStationController {
     @PostMapping("/firestation")
     public ResponseEntity<FireStationDto> createFireStation(@RequestBody FireStationDto fireStationDto) throws  Exception{
         if(fireStationDto.getId() != null){
-            throw new Exception("err");
+            throw new Exception("erreur ");
         }
 
         FireStationDto result = fireStationService.save(fireStationDto);

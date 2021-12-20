@@ -99,18 +99,18 @@ public class PersonService {
     }
 
     public Long countMajor(List<PersonDto> personDtos){
-        Long nbMajor = personDtos.stream().map(personMapper::toEntity).filter(person -> person.CalculAge(person.getBirthdate())>=18).count();
+        Long nbMajor = personDtos.stream().map(personMapper::toEntity).filter(person -> person.calculAge(person.getBirthdate())>=18).count();
         return nbMajor ;
     }
 
     public Long countMinor(List<PersonDto> personDtos){
-        Long nbMinor = personDtos.stream().map(personMapper::toEntity).filter(person -> person.CalculAge(person.getBirthdate())<=18).count();
+        Long nbMinor = personDtos.stream().map(personMapper::toEntity).filter(person -> person.calculAge(person.getBirthdate())<=18).count();
         return nbMinor;
     }
 
     public List<PersonDto> listChildAlert(String address){
         return personRepository.findPersonByAddress(address).stream()
-                .filter(person -> person.CalculAge(person.getBirthdate())<=18)
+                .filter(person -> person.calculAge(person.getBirthdate())<=18)
                 .map(personMapper::toDto)
                 .collect(Collectors.toList());
     }

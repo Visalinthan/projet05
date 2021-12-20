@@ -37,7 +37,7 @@ public class Person {
     @OneToOne(mappedBy = "person")
     private MedicalRecord medicalRecord;
 
-    public Long CalculAge(LocalDate birthdate) {
+    public Long calculAge(LocalDate birthdate) {
         return LocalDate.from(birthdate).until(LocalDate.now(), ChronoUnit.YEARS);
     }
 

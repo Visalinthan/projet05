@@ -8,6 +8,8 @@ import com.openclassroom.projet5.service.AddressService;
 import com.openclassroom.projet5.service.FireStationService;
 import com.openclassroom.projet5.service.MedicalRecordService;
 import com.openclassroom.projet5.service.PersonService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ public class PersonController {
     private final MedicalRecordService medicalRecordService;
     private final FireStationService fireStationService;
     private final AddressService addressService;
+    private static final Logger logger = LogManager.getLogger(PersonController.class);
 
     public PersonController(PersonService personService, MedicalRecordService medicalRecordService, FireStationService fireStationService, AddressService addressService) {
         this.personService = personService;
@@ -34,7 +37,14 @@ public class PersonController {
     @GetMapping("/person")
     public ResponseEntity<List<PersonDto>> getPersons() {
         List<PersonDto> persons = personService.list();
+        logger.trace("We've just greeted the user!");
+        logger.debug("We've just greeted the user!");
+        logger.info("We've just greeted the user!");
+        logger.warn("We've just greeted the user!");
+        logger.error("We've just greeted the user!");
+        logger.fatal("We've just greeted the user!");
         return ResponseEntity.ok().body(persons);
+
     }
 
 
@@ -42,6 +52,8 @@ public class PersonController {
     public ResponseEntity<PersonDto> createPerson(@RequestBody  PersonDto personDto) throws Exception {
         if (personDto.getId() != null) {
             throw new Exception("err");
+
+
         }
 
         PersonDto result = personService.save(personDto);
@@ -71,12 +83,14 @@ public class PersonController {
         List<PersonDto> personDtos =  personService.listPersonByStationNumber(StationNumber);
         Long nbMajor = personService.countMajor(personDtos);
         Long nbMinor = personService.countMinor(personDtos);
-        String countAge = "Nombre d'adultes : "+ nbMajor + " Nombre d'enfants : "+ nbMinor;
+        String countMajor = "Nombre d'adultes : "+ nbMajor;
+        String countMinor = "Nombre d'enfants : "+ nbMinor;
         List<Object> result = new ArrayList<>();
         for (PersonDto p : personDtos){
             result.add(p);
         }
-        result.add(countAge);
+        result.add(countMajor);
+        result.add(countMinor);
         return ResponseEntity.ok().body(result);
     }
 
@@ -107,7 +121,7 @@ public class PersonController {
             obj.add(p.getFirstName() +" "+ p.getLastName());
             obj.add(p.getPhone());
             Person person = new Person();
-            Long age = person.CalculAge(p.getBirthdate());
+            Long age = person.calculAge(p.getBirthdate());
             obj.add(age +" ans");
             if(medicalRecordDto.isPresent()) {
                 obj.add("Medications : " + medicalRecordDto.get().getMedications());
@@ -143,12 +157,12 @@ public class PersonController {
 
         for (PersonDto p : persons){
             List<Object> obj = new ArrayList<>();
-            if(p.getFirstName().equals(firstName) || p.getLastName().equals(lastName)){
+            if(p.getFirstName().equals(firstName) && p.getLastName().equals(lastName)){
                 obj.add(p.getFirstName() +" "+p.getLastName());
                 obj.add(p.getEmail());
 
                 Person person = new Person();
-                Long age = person.CalculAge(p.getBirthdate());
+                Long age = person.calculAge(p.getBirthdate());
                 obj.add(age +" ans");
 
                 Optional<MedicalRecordDto> medicalRecordDto = medicalRecordService.listMedicalByNames(p.getFirstName(), p.getLastName());
