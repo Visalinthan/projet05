@@ -20,6 +20,10 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Address> list(){
         return addressRepository.findAll();
     }

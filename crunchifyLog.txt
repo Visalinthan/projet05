@@ -1,0 +1,32 @@
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne habitant à l'adresse° 2 rue michelet!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsByNumberStation()
+INFO: Liste de personne couvert par la caserne n° 2!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.deletePersonByNames()
+WARN: La personne avec le nom Jack et le prénom s a été supprimé !
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsInfo()
+INFO: Info de Jack s !
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersons()
+INFO: Personne listé !
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne habitant à l'adresse° 644 Gershwin Cir!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne habitant à l'adresse° 908 73rd St!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne habitant à l'adresse° 947 E. Rose Dr!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne habitant à l'adresse° 834 Binoc Ave!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne habitant à l'adresse° 748 Townings Dr!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPersonsMedicalsByAddress()
+INFO: Liste de personne couvert par la caserne n° [1, 3]!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.updatePersonById()
+INFO: La personne avec l'id n° 1 a été modifié !
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.createPerson()
+INFO: Personne enregisté !
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.communityEmail()
+INFO: Liste d' addresse email des personne habitant  à torcy!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getChildAlert()
+INFO: Liste d'enfant affiché habitant à l'addresse 2 rue re!
+2021-12-21 15:52:47 [main] com.openclassroom.projet5.controller.PersonController.getPhoneAlert()
+INFO: Liste de n° téléphone des personnes couvert par la caserne n° 2!

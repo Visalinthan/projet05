@@ -8,10 +8,9 @@ import com.openclassroom.projet5.service.AddressService;
 import com.openclassroom.projet5.service.FireStationService;
 import com.openclassroom.projet5.service.MedicalRecordService;
 import com.openclassroom.projet5.service.PersonService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ public class PersonController {
     private final MedicalRecordService medicalRecordService;
     private final FireStationService fireStationService;
     private final AddressService addressService;
-    private static final Logger logger = LogManager.getLogger(PersonController.class);
 
     public PersonController(PersonService personService, MedicalRecordService medicalRecordService, FireStationService fireStationService, AddressService addressService) {
         this.personService = personService;
@@ -37,12 +35,9 @@ public class PersonController {
     @GetMapping("/person")
     public ResponseEntity<List<PersonDto>> getPersons() {
         List<PersonDto> persons = personService.list();
-        logger.trace("We've just greeted the user!");
-        logger.debug("We've just greeted the user!");
-        logger.info("We've just greeted the user!");
-        logger.warn("We've just greeted the user!");
-        logger.error("We've just greeted the user!");
-        logger.fatal("We've just greeted the user!");
+
+        Logger.info("Personne listé !");
+
         return ResponseEntity.ok().body(persons);
 
     }
@@ -52,11 +47,11 @@ public class PersonController {
     public ResponseEntity<PersonDto> createPerson(@RequestBody  PersonDto personDto) throws Exception {
         if (personDto.getId() != null) {
             throw new Exception("err");
-
-
         }
 
         PersonDto result = personService.save(personDto);
+
+        Logger.info("Personne enregisté !");
 
         return ResponseEntity.ok().body(result);
     }
@@ -67,6 +62,8 @@ public class PersonController {
 
         PersonDto result = personService.update(id,personDto);
 
+        Logger.info("La personne avec l'id n° "+id +" a été modifié !");
+
         return ResponseEntity.ok().body(result);
     }
 
@@ -74,6 +71,9 @@ public class PersonController {
     @DeleteMapping("/person")
     public ResponseEntity<?> deletePersonByNames(@RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName) {
         personService.deleteByNames(firstName,lastName);
+
+        Logger.warn("La personne avec le nom "+firstName+" et le prénom "+lastName+" a été supprimé !");
+
         return ResponseEntity.ok().build();
     }
 
@@ -91,6 +91,9 @@ public class PersonController {
         }
         result.add(countMajor);
         result.add(countMinor);
+
+        Logger.info("Liste de personne couvert par la caserne n° "+StationNumber+ "!");
+
         return ResponseEntity.ok().body(result);
     }
 
@@ -98,6 +101,9 @@ public class PersonController {
     public @ResponseBody
     ResponseEntity<List<PersonDto>> getChildAlert(@RequestParam("address") String address){
         List<PersonDto> person =  personService.listChildAlert(address);
+
+        Logger.info("Liste d'enfant affiché habitant à l'addresse "+address+ "!");
+
         return ResponseEntity.ok().body(person);
     }
 
@@ -105,6 +111,9 @@ public class PersonController {
     public @ResponseBody
     ResponseEntity<List<String>> getPhoneAlert(@RequestParam("firestation") int StationNumber){
         List<String> phone = personService.listPhoneByStationNumber(StationNumber);
+
+        Logger.info("Liste de n° téléphone des personnes couvert par la caserne n° "+StationNumber+ "!");
+
         return ResponseEntity.ok().body(phone);
     }
 
@@ -133,6 +142,7 @@ public class PersonController {
             result.add(obj);
         }
 
+        Logger.info("Liste de personne habitant à l'adresse° "+address+ "!");
 
         return ResponseEntity.ok().body(result);
     }
@@ -145,6 +155,8 @@ public class PersonController {
         for (Address a :addresses){
             result.add(this.getPersonsMedicalsByAddress(a.getAddress()).getBody());
         }
+
+        Logger.info("Liste de personne couvert par la caserne n° "+stations+ "!");
 
         return ResponseEntity.ok().body(result);
     }
@@ -176,6 +188,8 @@ public class PersonController {
 
         }
 
+        Logger.info("Info de "+firstName+ " "+lastName+" !");
+
         return ResponseEntity.ok().body(result);
     }
 
@@ -191,8 +205,9 @@ public class PersonController {
             }
         }
 
+        Logger.info("Liste d' addresse email des personne habitant  à "+city+ "!");
+
         return ResponseEntity.ok().body(result);
     }
-
 
 }

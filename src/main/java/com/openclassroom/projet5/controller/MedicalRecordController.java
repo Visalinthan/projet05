@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
-public class MedicalRecordController {
+public class  MedicalRecordController {
     private final MedicalRecordService medicalRecordService;
 
     public MedicalRecordController(MedicalRecordService medicalRecordService) {

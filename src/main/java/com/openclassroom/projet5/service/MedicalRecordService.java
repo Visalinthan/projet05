@@ -37,21 +37,42 @@ public class MedicalRecordService {
     }
 
 
+    /**
+     * Sauvergarde dans la base de données d'un dossier medical la méthode save de l'interface medicalRecordRepository
+     * @param medicalRecord
+     * @return une sauvegarde d'un dossier medical
+     */
     public MedicalRecord save(MedicalRecord medicalRecord) {
         return medicalRecordRepository.save(medicalRecord);
     }
 
 
+    /**
+     * Sauvergarde dans la base de données de plusieurs dossier medical avec la méthode saveAll de l'interface medicalRecordRepository
+     * @param medicalRecords
+     * @return une sauvegarde de plusieurs dossier medical
+     */
     public Iterable<MedicalRecord> save(Collection<MedicalRecord> medicalRecords) {
         return medicalRecordRepository.saveAll(medicalRecords);
     }
 
+    /**
+     * Recherche une liste de dossier medical avec la méthode findAll de l'interface medicalRecordRepository
+     * @return une liste de dossier medical
+     */
     public List<MedicalRecordDto> list() {
         return medicalRecordRepository.findAll().stream()
                 .map(medicalRecordMapper::toDto)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Sauvergarde ou modifaication dans la base de données un dossier medical d'une personne en fonction de son nom et prénom et son dossier médical éxistant
+     * @param firstName
+     * @param lastName
+     * @param medicalRecordDto
+     * @return
+     */
     public MedicalRecordDto save(String firstName, String lastName, MedicalRecordDto medicalRecordDto) {
         medicalRecordDto.setFirstName(firstName);
         medicalRecordDto.setLastName(lastName);
@@ -61,10 +82,21 @@ public class MedicalRecordService {
 
     }
 
+    /**
+     * Suppression dans la base de données d'un dossier médical en fonction du nom et du prénom entrée dans le paramètre
+     * @param firstName
+     * @param lastName
+     */
     public void deleteByNames(String firstName, String lastName) {
         medicalRecordRepository.deleteByNames(firstName, lastName);
     }
 
+    /**
+     * Recherche un dossier médical d'une personne en fonction du nom et du prénom entrée dans le paramètre
+     * @param firstName
+     * @param lastName
+     * @return un dossier médical
+     */
     public Optional<MedicalRecordDto> listMedicalByNames(String firstName, String lastName) {
         Optional<MedicalRecordDto> medicalRecordDto = medicalRecordRepository.findByPerson(firstName, lastName).stream()
                 .map(m->medicalRecordMapper.toDto(m))
