@@ -46,7 +46,7 @@ public class PersonController {
     @PostMapping("/person")
     public ResponseEntity<PersonDto> createPerson(@RequestBody  PersonDto personDto) throws Exception {
         if (personDto.getId() != null) {
-            throw new Exception("err");
+            throw new Exception("erreur ");
         }
 
         PersonDto result = personService.save(personDto);
