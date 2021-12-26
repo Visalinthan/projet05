@@ -32,6 +32,10 @@ public class PersonController {
         this.addressService = addressService;
     }
 
+    /**
+     * Récupère la liste des personne avec la méthode list dans la class personService
+     * @return une réponse http avec la liste de personne
+     */
     @GetMapping("/person")
     public ResponseEntity<List<PersonDto>> getPersons() {
         List<PersonDto> persons = personService.list();
@@ -43,6 +47,12 @@ public class PersonController {
     }
 
 
+    /**
+     * Enregitsre une personne avec la méthode save dans la class personService
+     * @param personDto
+     * @return une réponse http avec la personne enregistré
+     * @throws Exception
+     */
     @PostMapping("/person")
     public ResponseEntity<PersonDto> createPerson(@RequestBody  PersonDto personDto) throws Exception {
         if (personDto.getId() != null) {
@@ -57,6 +67,12 @@ public class PersonController {
     }
 
 
+    /**
+     * Modifie une personne avec la méthode update dans la class personService
+     * @param id
+     * @param personDto
+     * @return une réponse http avec la personne modifié
+     */
     @PutMapping("/person/{id}")
     public ResponseEntity<PersonDto> updatePersonById(@PathVariable("id") long id,@RequestBody  PersonDto personDto){
 
@@ -67,7 +83,12 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
-
+    /**
+     * Supprime une personne avec la méthode deleteByNames dans la class personService
+     * @param firstName
+     * @param lastName
+     * @return une réponse http avec la personne supprimé
+     */
     @DeleteMapping("/person")
     public ResponseEntity<?> deletePersonByNames(@RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName) {
         personService.deleteByNames(firstName,lastName);
@@ -77,6 +98,11 @@ public class PersonController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     *
+     * @param StationNumber
+     * @return
+     */
     @RequestMapping(value="firestation", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsByNumberStation(@RequestParam("stationNumber") int StationNumber){
