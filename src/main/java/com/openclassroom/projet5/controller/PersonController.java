@@ -80,6 +80,11 @@ public class PersonController {
 
         Logger.info("La personne avec l'id n° "+id +" a été modifié !");
 
+        if(!personDto.getFirstName().isEmpty() || !personDto.getLastName().isEmpty()){
+            Logger.warn("La personne avec le nom "+personDto.getFirstName()+" et le prénom "+personDto.getLastName()+" ne peut pas etre modifié !");
+        }
+
+
         return ResponseEntity.ok().body(result);
     }
 
@@ -99,9 +104,9 @@ public class PersonController {
     }
 
     /**
-     *
+     * Liste de personne couvert par un numéro de caserne
      * @param StationNumber
-     * @return
+     * @return liste de personne
      */
     @RequestMapping(value="firestation", method = RequestMethod.GET)
     public @ResponseBody
@@ -123,6 +128,11 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Liste d'enfant affiché habitant à l'addresse donnée
+     * @param address
+     * @return liste de personne
+     */
     @RequestMapping(value="childAlert", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<PersonDto>> getChildAlert(@RequestParam("address") String address){
@@ -133,6 +143,11 @@ public class PersonController {
         return ResponseEntity.ok().body(person);
     }
 
+    /**
+     * Liste de n° téléphone des personnes couvert par la numéro de caserne donnée
+     * @param StationNumber
+     * @return liste de chaine de caractère
+     */
     @RequestMapping(value="phoneAlert", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<String>> getPhoneAlert(@RequestParam("firestation") int StationNumber){
@@ -143,6 +158,11 @@ public class PersonController {
         return ResponseEntity.ok().body(phone);
     }
 
+    /**
+     * Liste de personne habitant à l'adresse donnée
+     * @param address
+     * @return liste de personne
+     */
     @RequestMapping(value="fire", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("address") String address){
@@ -173,6 +193,11 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Liste de personne couvert par les numéros de caserne données
+     * @param stations
+     * @return liste de personne
+     */
     @RequestMapping(value="flood/stations", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsMedicalsByAddress(@RequestParam("stations") List<Integer> stations){
@@ -187,6 +212,12 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Information sur une personne
+     * @param firstName
+     * @param lastName
+     * @return une personne
+     */
     @RequestMapping(value="personInfo", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<Object>> getPersonsInfo(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
@@ -219,6 +250,11 @@ public class PersonController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Liste d' addresse email des personne sur une ville donnée
+     * @param city
+     * @return liste de chaine de caractère
+     */
     @RequestMapping(value="communityEmail", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<List<String>> communityEmail(@RequestParam("city") String city){

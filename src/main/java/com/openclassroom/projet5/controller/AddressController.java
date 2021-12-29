@@ -7,6 +7,7 @@ import com.openclassroom.projet5.service.PersonService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.tinylog.Logger;
 
 @RestController
 @RequestMapping("/address")
@@ -18,7 +19,12 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    /**
+     * Récupère la liste des addresses avec la méthode list dans la class addressService
+     * @return list d'adresse
+     */
     public Iterable<Address> list(){
+        Logger.info("Liste adresse !");
         return addressService.list();
     }
 

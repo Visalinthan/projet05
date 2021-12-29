@@ -91,8 +91,8 @@ public class PersonService {
 
         if (personFind.isPresent()) {
             PersonDto personUpdate = personFind.get();
-            personUpdate.setFirstName(personDto.getFirstName());
-            personUpdate.setLastName(personDto.getLastName());
+            personUpdate.setFirstName(personFind.get().getFirstName());
+            personUpdate.setLastName(personFind.get().getLastName());
             personUpdate.setEmail(personDto.getEmail());
             personUpdate.setBirthdate(personDto.getBirthdate());
             personUpdate.setPhone(personDto.getPhone());
